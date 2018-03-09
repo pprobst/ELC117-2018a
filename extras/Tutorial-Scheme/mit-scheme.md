@@ -32,7 +32,7 @@ Os arquivos em Scheme têm a extensão _.scm_. Caso tiver instalado MIT/GNU Sche
 ### 2.1 Manipulação de expressões
 Na maior parte deste tutorial, estaremos manipulando números, um tipo de _expressão primitiva_. Abra o interpretador Scheme digitando `scheme` no terminal.
 
-Caso você digitar um número qualquer, como por exemplo 166, o interpretador retornará `166` como esperado. Naturalmente, você pode combinar expressões para gerar resultados mais interessantes. Como Scheme utiliza notação de prefixo, o operador precede os operandos:
+Caso você digitar um número qualquer, como por exemplo 166, o interpretador retornará `166` como esperado. Naturalmente, você pode combinar expressões para gerar resultados mais interessantes. Como Scheme utiliza notação de prefixo ("notação polonesa"), o operador precede os operandos:
 
 ```scheme
 (+ 133 220)
@@ -163,7 +163,7 @@ Observa-se que a forma de _if_ é:
     <alternativo>)
 ```
 
-Como foi dito anteriormente, em Scheme também podemos utilizar operadores lógicos como _not_, _or_ e _and_. Como exemplo, podemos definir um predicado para testar se um número _x_ é maior ou igual a outro número _y_:
+Como foi indicado anteriormente, em Scheme também podemos utilizar operadores lógicos como _not_, _or_ e _and_. Como exemplo, podemos definir um predicado para testar se um número _x_ é maior ou igual a outro número _y_:
 
 ```scheme
 (define (>= x y) (or (> x y) (= x y)))
