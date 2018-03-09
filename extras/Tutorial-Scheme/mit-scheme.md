@@ -126,7 +126,7 @@ Ou, ainda, podemos definir _cubo_ localmente:
 ```
 
 ### 2.4 Expressões condicionais
-Scheme possui três palavras-chave usadas em controle de fluxo: _if_, _cond_ e _else_. Para análises de caso, a expressão _cond_ é comumente utilizada.
+Scheme possui quatro principais palavras-chave usadas em controle de fluxo: _if_, _cond_, _and_ e _or_. Para análises de caso, a expressão _cond_ é comumente utilizada.
 
 Vamos escrever, por exemplo, um procedimento que retorna o valor absoluto de um número _x_:
 
@@ -163,7 +163,7 @@ Observa-se que a forma de _if_ é:
     <alternativo>)
 ```
 
-Naturalmente, em Scheme também podemos utilizar operadores lógicos como _not_, _or_ e _and_. Como exemplo, podemos definir um predicado para testar se um número _x_ é maior ou igual a outro número _y_:
+Como foi dito anteriormente, em Scheme também podemos utilizar operadores lógicos como _not_, _or_ e _and_. Como exemplo, podemos definir um predicado para testar se um número _x_ é maior ou igual a outro número _y_:
 
 ```scheme
 (define (>= x y) (or (> x y) (= x y)))
