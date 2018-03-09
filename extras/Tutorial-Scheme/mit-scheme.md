@@ -1,7 +1,5 @@
 # **(((Scheme)))**
 ## _Do básico ao intermediário_
----
-### Pedro Probst Minini, Ciência da Computação, UFSM
 #
 ![](wizard.jpg)
 
