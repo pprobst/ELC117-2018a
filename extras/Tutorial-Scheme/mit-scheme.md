@@ -16,7 +16,7 @@ Uma linguagem de programação poderosa é mais do que simplesmente um meio de i
 
 * **expressões primitivas**, que representam as mais simples entidades nas quais a linguagem está interessada;
 * **meios de combinação**, pelo qual elementos compostos são construídos a partir de elementos mais simples;
-* **meios de abstração**, pelo qual elementos compostas podem ser nomeados e manipulados como unidades.
+* **meios de abstração**, pelo qual elementos compostos podem ser nomeados e manipulados como unidades.
 
 Neste tutorial, irei exibir os principais elementos de Scheme -- uma linguagem simples e muitas vezes estranha. Não focarei nos elementos mais teóricos da linguagem, mas sim nos elementos práticos dela.
 
@@ -67,7 +67,113 @@ Uma vantagem da notação de prefixo é que você pode aninhar expressões de um
 ```
 
 ### 2.2 A palavra-chave _define_
-Em Scheme, utilizamos
+Em Scheme, utilizamos a palavra-chave _define_ para nomear _coisas_. Pode-se dizer que o nome identifica uma _variável_ cujo valor é o _objeto_. Por exemplo, ao digitarmos
+
+```scheme
+(define soma-qualquer (+ 2 3))
+```
+Estamos _definindo_ soma qualquer como o valor da soma de 2 e 3.
+
+```scheme
+soma-qualquer
+5
+```
+
+### 2.3 _Definindo_ procedimentos
+_Definição de procedimentos_ é uma técnica de abstração na qual pode ser dado um nome à uma operação composta, que por fim é referenciada como uma unidade qualquer.
+
+O usuário pode definir seus próprios procedimentos utilizando a palavra-chave _define_ vista anteriormente. Vamos definir, por exemplo, o procedimento _cubo_, que retorna um número _x_ elevado à terceira potência.
+
+```scheme
+(define (cubo x) (* x x x))
+(cubo 3)
+9
+(cubo (+ 3 3))
+216
+(cubo (cubo (+ 3 3)))
+10077696
+; Note como x pode ser um procedimento!
+
+; Esqueci de informar: podemos usar ponto e vírgula
+; para escrever comentários.
+```
+
+Como pode ser observado acima, a forma geral de um procedimento é a seguinte:
+
+```scheme
+(define (<nome> <parâmetros formais>)
+  <corpo>)
+```
+Podemos utilizar _cubo_ como um bloco de construção para procedimentos mais complexos:
+
+```scheme
+(define (soma-de-cubos x y)
+  (+ (cubo x) (cubo y)))
+
+(soma-de-cubos 5 5)
+250
+```
+
+Ou, ainda, podemos definir _cubo_ localmente:
+
+```scheme
+(define (soma-de-cubos x y)
+  (define (cubo x) (* x x x))
+  (+ (cubo x) (cubo y)))
+
+(soma-de-cubos 34534 2353456)
+13035257711177228120
+```
+
+### 2.4 Expressões condicionais
+Scheme possui três palavras-chave usadas em controle de fluxo: _if_, _cond_ e _else_. Para análises de caso, a expressão _cond_ é comumente utilizada.
+
+Vamos escrever, por exemplo, um procedimento que retorna o valor absoluto de um número _x_:
+
+```scheme
+(define (abs x)
+  (cond ((> x 0) x)
+        ((= x 0) 0)
+        ((< x 0) (- x))))
+```
+
+Observando acima, podemos observar que a forma geral de _cond_ é a seguinte:
+
+```scheme
+(cond (<predicado> <expressão consequente>)
+      (<predicado> <expressão consequente>)
+      ...
+      (<predicado> <expressão consequente>))
+```
+
+Se quisermos reescrever _abs_ usando _if_:
+
+```scheme
+(define (abs x)
+  (if (< x 0)
+      (- x)
+      x))
+```
+
+Observa-se que a forma de _if_ é:
+
+```scheme
+(if <predicado>
+    <consequente>
+    <alternativo>)
+```
+
+Naturalmente, em Scheme também podemos utilizar operadores lógicos como _not_, _or_ e _and_. Como exemplo, podemos definir um predicado para testar se um número _x_ é maior ou igual a outro número _y_:
+
+```scheme
+(define (>= x y) (or (> x y) (= x y)))
+(>= 5 3)
+#t
+(>= 3 5)
+#f
+```
+
+
 
 ---
 
