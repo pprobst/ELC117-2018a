@@ -239,10 +239,23 @@ Se você percebeu que o resultado de _novo-par_ se parece com uma lista, parabé
                                    (cons 3 '()))))) ; '() -> nil (nulo)
 lista
 (0 1 2 3) ; Ora ora, uma lista!
+
+(pair? lista)
+#t
+(car lista)
+0
+(cdr lista)
+(1 2 3)
+```
+
+Naturalmente, seria complicado se tivêssemos que escrever pares em cascata toda vez que precisássemos criar uma lista. Usando o procedimento _list_, podemos criar listas facilmente.
+
+```Scheme
+colocar algo de list e cdr
 ```
 
 ## 3. O intermediário
-
+começar com recursão?
 
 ---
 
