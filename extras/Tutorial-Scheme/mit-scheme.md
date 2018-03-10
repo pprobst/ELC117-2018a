@@ -72,7 +72,7 @@ Em Scheme, utilizamos a palavra-chave _define_ para nomear _coisas_. Pode-se diz
 ```scheme
 (define soma-qualquer (+ 2 3))
 ```
-Estamos _definindo_ soma qualquer como o valor da soma de 2 e 3.
+Estamos definindo _soma-qualquer_ como o valor da soma de 2 e 3.
 
 ```scheme
 soma-qualquer
@@ -92,7 +92,9 @@ O usuário pode definir seus próprios procedimentos utilizando a palavra-chave 
 216
 (cubo (cubo (+ 3 3)))
 10077696
-; Note como x pode ser um procedimento!
+; Note como x pode ser um procedimento. Em Scheme,
+; você pode manipular procedimentos como se fossem
+; valores quaisquer.
 
 ; Esqueci de informar: podemos usar ponto e vírgula
 ; para escrever comentários.
@@ -173,7 +175,34 @@ Como foi indicado anteriormente, em Scheme também podemos utilizar operadores l
 #f
 ```
 
+### Exemplo: Raiz quadrada pelo método de Newton
+Neste código, utilizamos um caso específico do método de Newton (aproximações sucessivas) para calcular a raiz quadrada de um número. Este método diz que, quando tivermos um palpite _y_ para o valor da raiz quadrada de um número _x_, nós podemos obter um palpite melhor fazendo a média de _y_ com _x/y_. Repetindo esse processo, nós obtemos aproximações cada vez melhores da raiz quadrada.
 
+```Scheme
+(define (raiz-quadrada x)
+  (define (raiz-quadrada-iter palpite x) ; iteração
+    (if (suficientemente-bom? palpite x)
+        palpite
+        (raiz-quadrada-iter (melhore palpite x) x)))
+  (raiz-quadrada-iter 1.0 x)) ; 1.0 é o nosso palpite inicial
+
+(define (suficientemente-bom? palpite x)
+  (< (abs (- (square palpite) x)) 0.001))
+
+; obs.: em Scheme, é uma boa prática colocar pontos de interrogação
+; em predicados.
+
+(define (melhore palpite x)
+  (media palpite (/ x palpite)))
+
+(define (media x y)
+  (/ (+ x y) 2))
+
+(raiz-quadrada 4.0)
+2.0000000929222947
+(raiz-quadrada 2.0)
+1.4142156862745097
+```
 
 ---
 
