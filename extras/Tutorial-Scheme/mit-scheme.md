@@ -36,25 +36,25 @@ Caso você digitar um número qualquer, como por exemplo 166, o interpretador re
 
 ```scheme
 (+ 133 220)
-353
+; 353
 (- 344 567)
--233
+; -233
 (* 4 5)
-20
+; 20
 (/ 30 5)
-6
+; 6
 (+ 2.6 0.3)
-2.9
+; 2.9
 (* 3 4 5 6 7 8)
-20160
+; 20160
 ```
 Uma vantagem da notação de prefixo é que você pode aninhar expressões de um modo bastante direto:
 
 ```scheme
 (+ (* 3 5) (- 10 6))
-19
+; 19
 (/ 53.0 (+ 65 (* 2 2)))
-.7681159420289855
+; .7681159420289855
 ```
 É uma boa prática alterar a forma do código quando necessário:
 ```scheme
@@ -63,7 +63,7 @@ Uma vantagem da notação de prefixo é que você pode aninhar expressões de um
          (+ 3 5)))
    (+ (- 10 7)
       6))
-57
+; 57
 ```
 
 ### 2.2 A palavra-chave _define_
@@ -76,7 +76,7 @@ Estamos definindo _soma-qualquer_ como o valor da soma de 2 e 3.
 
 ```scheme
 soma-qualquer
-5
+; 5
 ```
 
 ### 2.3 _Definindo_ procedimentos
@@ -87,11 +87,11 @@ O usuário pode definir seus próprios procedimentos utilizando a palavra-chave 
 ```scheme
 (define (cubo x) (* x x x))
 (cubo 3)
-9
+; 9
 (cubo (+ 3 3))
-216
+; 216
 (cubo (cubo (+ 3 3)))
-10077696
+; 10077696
 ; Note como x pode ser um procedimento. Em Scheme,
 ; você pode manipular procedimentos como se fossem
 ; valores quaisquer.
@@ -113,7 +113,7 @@ Podemos utilizar _cubo_ como um bloco de construção para procedimentos mais co
   (+ (cubo x) (cubo y)))
 
 (soma-de-cubos 5 5)
-250
+; 250
 ```
 
 Ou, ainda, podemos definir _cubo_ localmente:
@@ -124,7 +124,7 @@ Ou, ainda, podemos definir _cubo_ localmente:
   (+ (cubo x) (cubo y)))
 
 (soma-de-cubos 34534 2353456)
-13035257711177228120
+; 13035257711177228120
 ```
 
 ### 2.4 Expressões condicionais
@@ -170,9 +170,9 @@ Como foi indicado anteriormente, em Scheme também podemos utilizar operadores l
 ```scheme
 (define (>= x y) (or (> x y) (= x y)))
 (>= 5 3)
-#t
+; #t
 (>= 3 5)
-#f
+; #f
 ```
 
 ### Exemplo: Raiz quadrada pelo método de Newton
@@ -199,9 +199,9 @@ Neste código, utilizamos um caso específico do método de Newton (aproximaçõ
   (/ (+ x y) 2))
 
 (raiz-quadrada 4.0)
-2.0000000929222947
+; 2.0000000929222947
 (raiz-quadrada 2.0)
-1.4142156862745097
+; 1.4142156862745097
 ```
 
 ### 2.5 Pares e listas
@@ -211,23 +211,23 @@ Em Scheme, _pares_ de expressões são usadas como base para listas. Um par comb
 ; Usamos 'cons' para gerar um par de dois valores quaisquer.
 (define par (cons 1 2))
 par
-(1 . 2)
+; (1 . 2)
 
 (car par)
-1
+; 1
 (cdr par)
-2
+; 2
 
 ; Podemos criar pares de pares. Notou algo interessante no
 ; resultado de 'novo-par'?
 (define novo-par (cons par 3))
 novo-par
-((1 . 2) . 3)
+; ((1 . 2) . 3)
 
 (car novo-par)
-(1 . 2)
+; (1 . 2)
 (cdr novo-par)
-3
+; 3
 ```
 
 Se você percebeu que o resultado de _novo-par_ se parece com uma lista, parabéns: listas, em Scheme, não passam de pares em cascata. Veja como podemos gerar uma pequena lista apenas com pares:
@@ -238,14 +238,14 @@ Se você percebeu que o resultado de _novo-par_ se parece com uma lista, parabé
                             (cons 2
                                    (cons 3 '()))))) ; '() -> nil (nulo)
 lista
-(0 1 2 3) ; Ora ora, uma lista!
+; (0 1 2 3) ; Ora ora, uma lista!
 
 (pair? lista)
-#t
+; #t
 (car lista)
-0
+; 0
 (cdr lista)
-(1 2 3)
+; (1 2 3)
 ```
 
 Naturalmente, seria complicado se tivêssemos que escrever pares em cascata toda vez que precisássemos criar uma lista. Usando o procedimento _list_, podemos criar listas facilmente.
