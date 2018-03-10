@@ -30,7 +30,7 @@ Os arquivos em Scheme têm a extensão _.scm_. Caso tiver instalado MIT/GNU Sche
 
 ## 2. Os básicos
 ### 2.1 Manipulação de expressões
-Na maior parte deste tutorial, estaremos manipulando números, um tipo de _expressão primitiva_. Abra o interpretador Scheme digitando `scheme` no terminal.
+Na maior parte deste tutorial, estaremos manipulando números, um tipo de _expressão primitiva_. Abra o [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) do Scheme digitando `scheme` no terminal.
 
 Caso você digitar um número qualquer, como por exemplo 166, o interpretador retornará `166` como esperado. Naturalmente, você pode combinar expressões para gerar resultados mais interessantes. Como Scheme utiliza notação de prefixo ("notação polonesa"), o operador precede os operandos:
 
@@ -204,9 +204,51 @@ Neste código, utilizamos um caso específico do método de Newton (aproximaçõ
 1.4142156862745097
 ```
 
+### 2.5 Pares e listas
+Em Scheme, _pares_ de expressões são usadas como base para listas. Um par combina dois valores, e os procedimentos _car_ e _cdr_ (pronuncia-se "cãder") são usados para acessar o primeiro e o segundo valor do par, respectivamente.
+
+```Scheme
+; Usamos 'cons' para gerar um par de dois valores quaisquer.
+(define par (cons 1 2))
+par
+(1 . 2)
+
+(car par)
+1
+(cdr par)
+2
+
+; Podemos criar pares de pares. Notou algo interessante no
+; resultado de 'novo-par'?
+(define novo-par (cons par 3))
+novo-par
+((1 . 2) . 3)
+
+(car novo-par)
+(1 . 2)
+(cdr novo-par)
+3
+```
+
+Se você percebeu que o resultado de _novo-par_ se parece com uma lista, parabéns: listas, em Scheme, não passam de pares em cascata. Veja como podemos gerar uma pequena lista apenas com pares:
+
+```Scheme
+(define lista (cons 0
+                     (cons 1
+                            (cons 2
+                                   (cons 3 '()))))) ; '() -> nil (nulo)
+lista
+(0 1 2 3) ; Ora ora, uma lista!
+```
+
+## 3. O intermediário
+
+
 ---
 
 ## Referências
 _Structure and Interpretation of Computer Programs, 2nd ed._, Harold Abelson and Gerald Jay Sussman with Julie Sussman
 
 _The Little Schemer, 4th ed._, Daniel P. Friedman & Matthias Felleisen
+
+https://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/
