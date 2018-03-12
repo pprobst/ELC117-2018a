@@ -205,11 +205,12 @@ Neste código, utilizamos um caso específico do método de Newton (aproximaçõ
 ```
 
 ### 2.5 Pares e listas
-Em Scheme, _pares_ de expressões são usadas como base para listas. Um par combina dois valores, e os procedimentos _car_ e _cdr_ (pronuncia-se "cãder") são usados para acessar o primeiro e o segundo valor do par, respectivamente.
+Em Scheme, _pares_ de expressões são usados como base para listas. Um par combina dois valores, e os procedimentos _car_ e _cdr_ (pronuncia-se "'kü'dEr") são usados para acessar o primeiro e o segundo valor do par, respectivamente.
 
 ```Scheme
 ; Usamos 'cons' para gerar um par de dois valores quaisquer.
 (define par (cons 1 2))
+
 par
 ; (1 . 2)
 
@@ -221,6 +222,7 @@ par
 ; Podemos criar pares de pares. Notou algo interessante no
 ; resultado de 'novo-par'?
 (define novo-par (cons par 3))
+
 novo-par
 ; ((1 . 2) . 3)
 
@@ -248,14 +250,200 @@ lista
 ; (1 2 3)
 ```
 
-Naturalmente, seria complicado se tivêssemos que escrever pares em cascata toda vez que precisássemos criar uma lista. Usando o procedimento _list_, podemos criar listas facilmente.
+Naturalmente, seria complicado se tivéssemos que escrever pares em cascata toda vez que precisássemos criar uma lista. Usando o procedimento _list_, podemos criar listas facilmente.
 
 ```Scheme
-colocar algo de list e cdr
+(define lista1 (list 1 2 3))
+
+lista1
+; (1 2 3)
+
+; Você também pode definir listas aninhadas:
+(define lista2 (list 1 (list 5 6 (list 7 2 5)) 10 11 12 lista1))
+
+lista2
+; (1 (5 6 (7 2 5)) 10 11 12 (1 2 3))
+
+; Podemos utilizar cadr e suas variações para acessar elementos
+; específicos da lista:
+(cadr lista2) ; retorna o segundo elemento da lista1
+(caddr lista2) ; retorna o terceiro
+(cadddr lista2) ; retorna o quarto e assim por diante
+
+; Veja mais em:
+;https://franz.com/support/documentation/8.1/ansicl/dictentr/carcdrca.htm
+```
+Certo, listas são bem úteis. Mas como posso percorrê-la em um "loop", como estamos acostumados? Podemos acessar os diferentes elementos em uma lista "cdrando", ou seja, aplicando _cdr_ sucessivamente na lista.
+
+Vamos implementar uma função que retorne o valor de uma lista indicado pelo argumento de referência (ou índice):
+
+```Scheme
+(define (lista-ref lista i)
+  (if (zero? i)
+      (car lista)
+      (lista-ref (cdr lista) (- i 1))))
+
+(lista-ref (list "s" "c" "h" "e" "m" "e") 2)
+; "h"
+```
+Como geralmente percorremos uma lista com muita frequência, Scheme nos fornece o predicado primitivo _null?_, que checa se o argumento é a lista vazia. O procedimento abaixo calcula o tamanho de uma lista:
+
+```Scheme
+(define (tamanho lista)
+  (if (null? lista)
+      0
+      (+ 1 (tamanho (cdr lista)))))
+
+(tamanho (list 1 2 3 4 5 (list 1 2 3)))
+; 6
+```
+### 2.6 Map
+Em Scheme, _map_ é um procedimento que _faz algo_ com cada elemento de uma lista. _Map_ aceita como argumentos um procedimento e uma lista, e executará esse procedimento sobre a lista.
+
+```Scheme
+(define (duplicar x) (+ x x))
+(map duplicar (list 1 2 3 4 5))
+; (2 4 6 8 10)
 ```
 
+Veja outros procedimentos sobre listas em https://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Mapping-of-Lists.html
+
 ## 3. O intermediário
-começar com recursão?
+### 3.1 Funções de ordem superior
+Dos conceitos de programação funcional, uma função de ordem superior caracteriza-se por ser uma função que tem como argumento uma função ou que retorne uma função.
+
+Veja um exemplo de procedimentos de ordem superior sendo utilizados nas duas maneiras descritas:
+
+```Scheme
+(define (adicione-um)
+  (define (inc x) (+ x 1))
+  inc) ; retorna um procedimento
+
+adicione-um
+; #[compound-procedure 13 adicione-um]
+
+(define f (adicione-um)) ; tem um procedimento como argumento
+(f 5)
+; 6
+```
+Funções de ordem superior são usadas muito comumente em Scheme. E, na verdade, já havíamos usado esse tipo de função na seção 2.X. Volte para ela e veja se consegue achar.
+
+### 3.2 Lambda
+Em Scheme, podemos criar funções anônimas (sem nome) quando quisermos. O uso de lambda é extremamente útil caso precisarmos criar um procedimento específico que será usado em apenas um lugar.
+
+Na verdade, toda definição de procedimento em Scheme faz uso de lambda. Quando fazemos _(define f 5)_, por exemplo, estamos utilizando lambda por baixo.
+
+Lembra-se do código utilizado na seção _2.6 Map_? Podemos reescrevê-lo utilizando lambda da seguinte forma:
+
+```Scheme
+(map (lambda (x) (+ x x)) (list 1 2 3 4 5))
+; (2 4 6 8 10)
+```
+
+### 3.3 _Closure_ (clausura)
+Uma clausura é um procedimento que "grava" o ambiente no qual ela foi criada. Quando você o chama, esse ambiente é restaurado antes do código ser executado.
+
+Na verdade, usamos clausura na seção _3.1_, quando definimos ```(define f (adicione-um))```. Note que _adicione-um_ retorna uma clausura, que contém uma referência à _(inc x)_ e uma cópia do ambiente ao redor dele. Quando definimos _f_, fazemos que ele retorne um procedimento. Assim, ao invocarmos _f_ com algum valor, será retornado esse valor somado a 1.
+
+Veja outro exemplo de clausura, dessa vez usando lambda:
+
+```Scheme
+(define (somador a)
+    (lambda (b) (+ a b)))
+
+(define mais-5 (somador 5))
+
+mais-5
+; #[compound-procedure 13]
+
+(mais-5 4)
+; 9
+```
+
+### 3.4 Recursão
+Scheme faz uso constante de recursão (procedimentos que chamam a si mesmos), em especial de _recursão de cauda_, onde utilizamos recursão ao invés de iteração. São executados os cálculos primeiro e, em seguida, é executada a chamada recursiva, passando os resultados de sua etapa atual para o próximo passo recursivo. Na recursão tradição, o que ocorre é o oposto.
+
+Vamos ver como o clássico fatorial é implementado em Scheme:
+
+```Scheme
+(define (fact n)
+  (if (= 0 n)
+      1
+      (* n (fact (- n 1)))))
+
+(fact 6)
+; 720
+```
+
+Mais interessante ainda: implementaremos uma versão simples de map utilizando recursão.
+
+```Scheme
+(define (mapeie f lista)
+  (if (null? lista)
+      '()
+      (cons (f (car lista))
+            (mapeie f (cdr lista)))))
+
+(mapeie square (list 1 2 3 4 5))
+; (1 4 9 16 25)
+```
+Naturalmente, operações recursivas são bastante custosas. Podemos optar por soluções iterativas quando for conveninente:
+
+```Scheme
+(define (fact-iter produto contador max-cont)
+  (if (> contador max-cont)
+      produto
+      (fact-iter (* contador produto)
+                 (+ contador 1)
+                 max-cont)))
+
+; Ou, de outro modo:
+
+(define (fact n)
+  (define (fact-iter acumulador contador)
+    (if (= 0 contador)
+        acumulador
+        (fact-iter (* contador acumulador) (- contador 1))))
+  (fact-iter 1 n))
+
+(fact 6)
+; 720
+```
+Comparando as formas das versões recursiva e iterativa de fatorial, temos o seguinte:
+
+```Scheme
+--> Versão recursiva:
+(fact 6)
+(* 6 (fact 5))
+(* 6 (* 5 (fact 4)))
+(* 6 (* 5 (* 4 (fact 3))))
+(* 6 (* 5 (* 4 (* 3 (fact 2)))))
+(* 6 (* 5 (* 4 (* 3 (* 2 (fact 1))))))
+(* 6 (* 5 (* 4 (* 3 (* 2 1)))))
+(* 6 (* 5 (* 4 (* 3 2))))
+(* 6 (* 5 (* 4 6)))
+(* 6 (* 5 24))
+(* 6 120)
+720
+
+--> Versão iterativa (1a)
+(fact 6)
+(fact-iter 1 1 6)
+(fact-iter 1 2 6)
+(fact-iter 2 3 6)
+(fact-iter 6 4 6)
+(fact iter 24 5 6)
+(fact-iter 120 6 6)
+(fact-iter 720 7 6)
+720
+```
+
+---
+
+## Outros conceitos
+Chegamos ao fim deste guia, que abrange o básico e um pouco do intermediário em Scheme. Na verdade, com os conceitos que vimos até agora, já podemos implementar uma boa parcela de problemas em Scheme, especialmente matemáticos.
+
+Fica a cargo do leitor fazer uma busca por outros conceitos. Se quiser, comece pelas referências abaixo.
 
 ---
 
@@ -265,3 +453,9 @@ _Structure and Interpretation of Computer Programs, 2nd ed._, Harold Abelson and
 _The Little Schemer, 4th ed._, Daniel P. Friedman & Matthias Felleisen
 
 https://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/
+
+ftp://ftp.cs.utexas.edu/pub/garbage/cs345/schintro-v13/schintro_122.html
+
+https://people.eecs.berkeley.edu/~bh/ssch8/higher.html
+
+ftp://ftp.cs.utexas.edu/pub/garbage/cs345/schintro-v13/schintro_127.html
