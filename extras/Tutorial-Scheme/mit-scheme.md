@@ -1,6 +1,6 @@
 # **(((Scheme)))**
 ## _Do básico ao intermediário_
-#
+
 ![](wizard.jpg)
 
 ---
