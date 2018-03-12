@@ -86,12 +86,16 @@ O usuário pode definir seus próprios procedimentos utilizando a palavra-chave 
 
 ```scheme
 (define (cubo x) (* x x x))
+
 (cubo 3)
 ; 9
+
 (cubo (+ 3 3))
 ; 216
+
 (cubo (cubo (+ 3 3)))
 ; 10077696
+
 ; Note como x pode ser um procedimento. Em Scheme,
 ; você pode manipular procedimentos como se fossem
 ; valores quaisquer.
@@ -169,6 +173,7 @@ Como foi indicado anteriormente, em Scheme também podemos utilizar operadores l
 
 ```scheme
 (define (>= x y) (or (> x y) (= x y)))
+
 (>= 5 3)
 ; #t
 (>= 3 5)
@@ -361,7 +366,7 @@ mais-5
 ```
 
 ### 3.4 Recursão
-Scheme faz uso constante de recursão (procedimentos que chamam a si mesmos), em especial de _recursão de cauda_, onde utilizamos recursão ao invés de iteração. São executados os cálculos primeiro e, em seguida, é executada a chamada recursiva, passando os resultados de sua etapa atual para o próximo passo recursivo. Na recursão tradição, o que ocorre é o oposto.
+Scheme faz uso constante de recursão (procedimentos que chamam a si mesmos), em especial de _recursão de cauda_, onde utilizamos recursão ao invés de iteração. São executados os cálculos primeiro e, em seguida, é executada a chamada recursiva, passando os resultados de sua etapa atual para o próximo passo recursivo. Na recursão tradicional, o que ocorre é o oposto.
 
 Vamos ver como o clássico fatorial é implementado em Scheme:
 
@@ -426,7 +431,7 @@ Comparando as formas das versões recursiva e iterativa de fatorial, temos o seg
 (* 6 120)
 720
 
---> Versão iterativa (1a)
+--> Versão iterativa (1a):
 (fact 6)
 (fact-iter 1 1 6)
 (fact-iter 1 2 6)
