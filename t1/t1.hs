@@ -26,11 +26,16 @@ addComma lst = map (++ ",") lst
 -- #3
 -- Recebe uma lista de strings e retorne outra lista contendo as strings 
 -- formatadas como itens de lista em HTML
---htmlListItems :: [String] -> [String]
---htmlListItems lst = map (("<LI>" ++) (++ "</LI>")) lst
+htmlListItems :: [String] -> [String]
+htmlListItems lst = map (concatStartEnd) lst
 
---htmlListItemsLambda :: [String] -> [String]
---htmlListItemsLambda lst = map (\x -> ("<LI>" ++) (++ "</LI>")) lst
+htmlListItemsLambda :: [String] -> [String]
+htmlListItemsLambda lst = map (\x -> "<LI>" ++ x ++ "</LI>") lst
+
+concatStartEnd :: String -> String
+concatStartEnd str = "<LI>" ++ str ++ "</LI>"
+
+-- FAZER MAIS GENÉRICO!
 
 -- #4
 -- Recebe uma string e retira as vogais dela.
@@ -72,9 +77,8 @@ lastName str = last (words str)
 -- #9
 -- Recebe a string com o nome completo de alguém cria um username:
 -- primeira letra do nome e último nome completo, tudo minúsculo
-userName :: String -> String
---username str =  
--- USAR LASTNAME E FIRSTNAME
+--userName :: String -> String
+--userName str = map (toLower ((head (firstName str)) ++ (lastName str))) str
 
 -- #10
 -- Substitui vogais em uma string conforme o esquema abaixo:
