@@ -59,7 +59,7 @@ codifica str = map (\c -> if isAlpha c then '-' else c) str
 -- #6
 -- Recebe uma string com o nome completo de alguém e retorna o primeiro nome.
 firstName :: String -> String
-firstName str = head (words str) -- E L E G Â N C I A
+firstName str = head (words str)
 -- 'words' separa a string em uma lista de strings, separadas pelo whitespace
 -- 'head' pega o primeiro elemento da lista
 
@@ -76,9 +76,13 @@ lastName str = last (words str)
 
 -- #9
 -- Recebe a string com o nome completo de alguém cria um username:
--- primeira letra do nome e último nome completo, tudo minúsculo
---userName :: String -> String
---userName str = map (toLower ((head (firstName str)) ++ (lastName str))) str
+-- Ex: userName "Linus Benedict Torvalds" --> "ltorvalds"
+userName :: String -> String
+userName str = toLower(head (firstName str)) 
+               : 
+               map (\c -> toLower c) (lastName str)
+-- aqui usou-se : ao invés de ++, pois o resultado de (head (firstName str))
+-- é um char, e ++ só funciona com listas.
 
 -- #10
 -- Substitui vogais em uma string conforme o esquema abaixo:
