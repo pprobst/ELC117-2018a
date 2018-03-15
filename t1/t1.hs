@@ -87,4 +87,18 @@ userName str = toLower(head (firstName str))
 -- #10
 -- Substitui vogais em uma string conforme o esquema abaixo:
 -- a = 4, e = 3, i = 2, o = 1, u = 0
---encodeName :: String -> String
+encodeName :: String -> String
+encodeName str = map (\c -> encodeValues c) str
+
+encodeValues :: Char -> Char
+encodeValues ch
+    | ch == 'a' || ch == 'A' = '4'
+    | ch == 'e' || ch == 'E' = '3'
+    | ch == 'i' || ch == 'I'= '2'
+    | ch == 'o' || ch == 'O'= '1'
+    | ch == 'u' || ch == 'U'= '0'
+    | otherwise = ch
+
+-- #11
+-- Mesmo que #10, mas com esquema diferente:
+-- a = 4, e = 3, i = 1, o = 0, u = 00
