@@ -49,7 +49,7 @@ semVogais3 str = filter (\c -> notElem c "aeiouAEIOU") str
 -- #5
 -- Recebe uma string e substitui os caracteres por '-', mantendo espaços.
 codifica :: String -> String
-codifica str = map (\c -> if isAlpha c then '-' else c) str
+codifica str = map (\c -> if isAlphaNum c then '-' else c) str
 
 -- #6
 -- Recebe uma string com o nome completo de alguém e retorna o primeiro nome.
