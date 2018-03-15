@@ -35,8 +35,6 @@ htmlListItemsLambda lst = map (\x -> "<LI>" ++ x ++ "</LI>") lst
 concatStartEnd :: String -> String
 concatStartEnd str = "<LI>" ++ str ++ "</LI>"
 
--- FAZER MAIS GENÉRICO!
-
 -- #4
 -- Recebe uma string e retira as vogais dela.
 semVogais :: String -> String
@@ -50,9 +48,6 @@ semVogais3 str = filter (\c -> notElem c "aeiouAEIOU") str
 
 -- #5
 -- Recebe uma string e substitui os caracteres por '-', mantendo espaços.
--- USAR REPLACE
---codificaReplace :: String -> String
---codificaReplace = 
 codifica :: String -> String
 codifica str = map (\c -> if isAlpha c then '-' else c) str
 
@@ -67,7 +62,9 @@ firstName str = head (words str)
 -- Verifica se uma string só contém dígitos de 0 a 9.
 isInt :: String -> Bool
 isInt = all isDigit
--- FAZER DE OUTRO MODO
+
+isInt2 :: String -> Bool
+isInt2 str = length (filter (isDigit) str) == length str
 
 -- #8
 -- Recebe uma string com o nome completo de alguém e pega seu último nome.
