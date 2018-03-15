@@ -82,7 +82,7 @@ userName str = toLower(head (firstName str))
                : 
                map (\c -> toLower c) (lastName str)
 -- aqui usou-se : ao invés de ++, pois o resultado de (head (firstName str))
--- é um char, e ++ só funciona com listas.
+-- é um char, e ++ só funciona entre listas.
 
 -- #10
 -- Substitui vogais em uma string conforme o esquema abaixo:
@@ -94,11 +94,24 @@ encodeValues :: Char -> Char
 encodeValues ch
     | ch == 'a' || ch == 'A' = '4'
     | ch == 'e' || ch == 'E' = '3'
-    | ch == 'i' || ch == 'I'= '2'
-    | ch == 'o' || ch == 'O'= '1'
-    | ch == 'u' || ch == 'U'= '0'
+    | ch == 'i' || ch == 'I' = '2'
+    | ch == 'o' || ch == 'O' = '1'
+    | ch == 'u' || ch == 'U' = '0'
     | otherwise = ch
 
 -- #11
 -- Mesmo que #10, mas com esquema diferente:
 -- a = 4, e = 3, i = 1, o = 0, u = 00
+betterEncode :: String -> String
+betterEncode str = concatMap (\c -> if c == '0' then "00"
+                                    else if c == '1' then "0"
+                                    else if c == '2' then "1"
+                                    else [c])
+                   (encodeName str)
+
+-- #12
+-- Recebe uma lista de strings e produz outra lista com strings de 10
+-- caracteresm usando o seguinte esquema:
+-- strings de entrada com mais de 10 caracteres são truncadas, strings 
+-- com até 10 caracteres são completadas com '.' até ficarem com 10 caracteres.
+
