@@ -111,7 +111,15 @@ betterEncode str = concatMap (\c -> if c == '0' then "00"
 
 -- #12
 -- Recebe uma lista de strings e produz outra lista com strings de 10
--- caracteresm usando o seguinte esquema:
+-- caracteres usando o seguinte esquema:
 -- strings de entrada com mais de 10 caracteres são truncadas, strings 
 -- com até 10 caracteres são completadas com '.' até ficarem com 10 caracteres.
+func :: [String] -> [String]
+func lst = map (\s -> if length s == 10 then s
+                      else if length s > 10 then take 10 s 
+                      else addDots s 10) lst
 
+addDots :: String -> Int -> String
+addDots str size
+    | length str >= size = str
+    | otherwise = str ++ (replicate (size-length str) '.')
