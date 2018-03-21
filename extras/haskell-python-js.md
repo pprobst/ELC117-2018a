@@ -111,7 +111,7 @@ function betw(lst) {
 }
 ```
 
-Veja mais em:
+Veja mais em sobre *list comprehension* em:
 
 https://wiki.haskell.org/List_comprehension
 
