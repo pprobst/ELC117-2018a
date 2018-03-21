@@ -83,7 +83,7 @@ fazer uso de *list comprehension*?
 *List comprehension*, em suma, é uma forma de gerar listas a partir de uma certa regra
 definida pelo programador. Com exemplos esse conceito ficará bem claro.
 
-Apesar de ser recente em JS (EcmaScript 7), Python suporta *list comprehension*
+Apesar de ser recente em JS (ECMAScript 7), Python suporta *list comprehension*
 desde a versão 2.0; em Haskell, é algo intrínseco à linguagem.
 
 Nos casos abaixo, usamos *list comprehension* para gerarmos uma lista que
