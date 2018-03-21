@@ -7,10 +7,11 @@
 Começaremos com uma função bem básica: a *squareMe*. Essa função recebe uma lista qualquer (usando o termo genericamente) como argumento e eleva ao quadrado todos os seus elementos.
 
 Haskell:
-
 ```Haskell
 squareMe :: [Int] -> [Int]
 squareMe lst = map (\x ->  x*x) lst
+> squareMe [1,2,3,4]
+-- [1,4,9,16]
 ```
 
 Python:
@@ -43,3 +44,30 @@ Note as diferenças de sintaxe no uso de *lambda*:
 (lambda x: x*x)    Python
 (x => x*x)         JavaScript
 ```
+
+Agora, vamos usar *filter* para filtrarmos todas as strings de uma lista de
+contém espaços:
+
+Haskell:
+```Haskell
+filterSpace :: [String] -> [String]
+filterSpace lst = filter (' ' `elem`) lst
+> filterSpace ["Kurapika", "Leorio", "Gon Freecss", "Killua Zoldyck"]
+-- ["Gon Freecss","Killua Zoldyck"]
+```
+
+Python:
+```Python
+def filterSpace(lst):
+    return list(filter(lambda x: ' ' in x, lst))
+```
+
+JavaScript:
+```JavaScript
+function filterSpace(lst) {
+    return lst.filter(x => x.includes(' '));
+}
+```
+
+Note como `elem`, `in` e `includes` têm uso similar nos três códigos: todos
+checam se *algo* está contido em *outra coisa*.
