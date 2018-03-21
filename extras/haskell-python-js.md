@@ -4,6 +4,8 @@
 
 ---
 
+### Funções de Ordem Superior e Lambda
+
 Começaremos com uma função bem básica: a *squareMe*. Essa função recebe uma lista qualquer (usando o termo genericamente) como argumento e eleva ao quadrado todos os seus elementos.
 
 Haskell:
@@ -71,3 +73,40 @@ function filterSpace(lst) {
 
 Note como `elem`, `in` e `includes` têm uso similar nos três códigos: todos
 checam se *algo* está contido em *outra coisa*.
+
+### *List Comprehension*
+
+Certo, pudemos ver com simples exemplos que funções de ordem superior e lambda
+funcionam de modo similar nas três linguagens vistas. Entretanto, como podemos
+fazer uso de *list comprehension*?
+
+*List comprehension*, em suma, é uma forma de gerar listas a partir de uma certa regra
+definida pelo programador. Com exemplos esse conceito ficará bem claro.
+
+Apesar de ser recente em JS (EcmaScript 7), Python suporta *list comprehension*
+desde a versão 2.0; em Haskell, é algo intrínseco à linguagem.
+
+Nos casos abaixo, usamos *list comprehension* para gerarmos uma lista que
+contenha todas as idades no intervalo fechado entre 15 e 30 anos, a partir 
+de uma lista de idades passada como parâmetro.
+
+Haskell:
+```Haskell
+bet15and30 :: [Int] -> [Int]
+bet15and30 lst = [x <- lst, x >= 15 && x <= 30]
+> bet15and30 [1,2,10,50,30,20,15,16,60,29
+-- [30,20,15,16,29]
+```
+
+Python:
+```Python
+def betFifteenAndThirty(lst):
+    return [x for x in lst if x >= 15 and x <= 30]
+```
+
+JavaScript:
+```JavaScript
+function betw(lst) {
+    return [for (x of lst) if (x >= 15 && x <= 30) lst];
+}
+```
