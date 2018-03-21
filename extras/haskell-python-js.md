@@ -47,7 +47,7 @@ Note as diferenças de sintaxe no uso de *lambda*:
 (x => x*x)         JavaScript
 ```
 
-Agora, vamos usar *filter* para filtrarmos todas as strings de uma lista de
+Agora, vamos usar *filter* para filtrarmos todas as strings de uma lista que
 contém espaços:
 
 Haskell:
