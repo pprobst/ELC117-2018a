@@ -25,3 +25,8 @@ translate (x:xs) = (\(a, b) -> (a+2, b+2)) x : translate xs
 
 -- #4
 -- Mesmo que #1, mas em ordem contrária:
+geraTabela' :: Int -> [(Int,Int)]
+geraTabela' 1 = (1,1) : []
+geraTabela' n = reverse((n,n*n) : geraTabela (n-1))
+
+
