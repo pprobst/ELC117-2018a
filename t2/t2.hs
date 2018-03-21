@@ -19,9 +19,9 @@ contido ch (x:xs)
 -- 2 unidades:
 translate :: [(Float,Float)] -> [(Float,Float)]
 translate [] = []
-translate (x:xs) = (\(x, y) -> (x+2, y+2)) x : translate xs
+translate (x:xs) = (\(a, b) -> (a+2, b+2)) x : translate xs
 -- É praticamente um map. O mesmo poderia ser resolvido com:
--- map (\(x,y) -> (x+2,y+2)) lista
+-- map (\(a,b) -> (a+2,b+2)) lista
 
 -- #4
 -- Mesmo que #1, mas em ordem contrária:
