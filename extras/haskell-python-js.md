@@ -94,7 +94,7 @@ Haskell:
 ```Haskell
 bet15and30 :: [Int] -> [Int]
 bet15and30 lst = [x <- lst, x >= 15 && x <= 30]
-> bet15and30 [1,2,10,50,30,20,15,16,60,29
+> bet15and30 [1,2,10,50,30,20,15,16,60,29]
 -- [30,20,15,16,29]
 ```
 
@@ -110,3 +110,12 @@ function betw(lst) {
     return [for (x of lst) if (x >= 15 && x <= 30) lst];
 }
 ```
+
+Veja mais em:
+
+https://wiki.haskell.org/List_comprehension
+
+http://www.secnetix.de/olli/Python/list_comprehensions.hawk
+
+https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Operators/Array_comprehensions
+
