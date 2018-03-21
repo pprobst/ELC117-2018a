@@ -101,12 +101,12 @@ bet15and30 lst = [x <- lst, x >= 15 && x <= 30]
 Python:
 ```Python
 def betFifteenAndThirty(lst):
-    return [x for x in lst if x >= 15 and x <= 30]
+    return [x for x in lst if (x >= 15 and x <= 30)]
 ```
 
 JavaScript:
 ```JavaScript
-function betw(lst) {
+function betFifteenAndThirty(lst) {
     return [for (x of lst) if (x >= 15 && x <= 30) lst];
 }
 ```
