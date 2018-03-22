@@ -74,6 +74,49 @@ function filterSpace(lst) {
 Note como `elem`, `in` e `includes` têm uso similar nos três códigos: todos
 checam se *algo* está contido em *outra coisa*.
 
+Outra função muito usada é a *Fold* ou *Reduce*. Como o próprio nome implica,
+ela reduz uma lista a um único valor, que é o procurado. Nos exemplos a seguir,
+buscamos pelo elemento de maior valor de uma lista.
+
+Haskell:
+```Haskell
+maiorValor :: [Int] -> Int
+maiorValor lst = foldr max (head lst) lst
+> maiorValor [1,2,10,5,-4,0,3]
+-- 10
+
+-- obs: (head lst) é apenas o primeiro valor a ser comparado 
+-- em relação à lista
+```
+
+Python:
+```Python
+from functools import reduce
+
+def maiorValor(lst):
+    return reduce(lambda a,b: a if (a > b) else b, lst)
+```
+
+JavaScript:
+```JavaScript
+function maiorValor(lst) {
+    return lst.reduce((a, b) => {
+        if (a > b) return a
+        else return b
+    });
+}
+```
+
+Obviamente há metodos melhores para calcular o valor máximo de uma lista,
+entretanto quis mostrar o potencial de *reduce* mais claramente. Vendo os
+códigos acima, você deve estar se perguntando por que o *reduce* de Haskell
+possui um nome diferente. Há uma boa e extensa explicação sobre as funções
+*fold* em https://wiki.haskell.org/Fold.
+
+Leia mais sobre *reduce* em Python e JS respectivamente em
+https://docs.python.org/3/library/functools.html#functools.reduce e 
+https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
+
 ### *List Comprehension*
 
 Certo, pudemos ver com simples exemplos que funções de ordem superior e lambda
@@ -109,6 +152,7 @@ JavaScript:
 function betFifteenAndThirty(lst) {
     return [for (x of lst) if (x >= 15 && x <= 30) lst];
 }
+// obs: não funciona na maioria dos browsers.
 ```
 
 Veja mais em sobre *list comprehension* em:
