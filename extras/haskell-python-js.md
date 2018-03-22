@@ -75,8 +75,8 @@ Note como `elem`, `in` e `includes` têm uso similar nos três códigos: todos
 checam se *algo* está contido em *outra coisa*.
 
 Outra função muito usada é a *Fold* ou *Reduce*. Como o próprio nome implica,
-ela reduz uma lista a um único valor, que é o procurado. Nos exemplos a seguir,
-buscamos pelo elemento de maior valor de uma lista.
+ela reduz uma lista a um único valor, que é o procurado de acordo com a função
+utilizada. Nos exemplos a seguir, buscamos pelo elemento de maior valor de uma lista.
 
 Haskell:
 ```Haskell
