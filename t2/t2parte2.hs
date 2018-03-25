@@ -32,3 +32,22 @@ auxBin2Dec (x:xs) exp = x*(2^exp) + auxBin2Dec xs (exp-1)
 bin2dec' :: [Integer] -> Integer
 bin2dec' [] = undefined
 bin2dec' bits = foldl (\acc x -> acc*2 + x) 0 bits
+
+-- #4
+-- Recebe um inteiro positivo e retorna a sua representação em binário,
+-- sob forma de uma lista de 0s e 1s. Funções auxiliares autorizadas: 
+-- mod, div e reverse.
+--dec2bin :: Int -> [Int]
+--dec2Bin n = 
+--VOLTAREMOS!
+
+-- #5 
+-- Verifica se uma dada string é hexadecimal ou não
+isHex :: String -> Bool
+isHex "" = False
+isHex str = head str == '0' && 
+            head (tail str) == 'x' && 
+            all (\x -> x `elem` "ABCDEFabcdef0123456789") (tail (tail str))
+
+-- isHex "0x1FA" ---> True
+-- isHex "1FA"   ---> False
