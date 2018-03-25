@@ -33,15 +33,18 @@ bin2dec' :: [Integer] -> Integer
 bin2dec' [] = undefined
 bin2dec' bits = foldl (\acc x -> acc*2 + x) 0 bits
 
--- #4
+-- #5
 -- Recebe um inteiro positivo e retorna a sua representação em binário,
 -- sob forma de uma lista de 0s e 1s. Funções auxiliares autorizadas: 
 -- mod, div e reverse.
---dec2bin :: Int -> [Int]
---dec2Bin n = 
---VOLTAREMOS!
+dec2bin :: Int -> [Int]
+dec2bin 0 = []
+dec2bin n
+    | mod n 2 == 1 = dec2bin (div n 2) ++ [1]
+    | mod n 2 == 0 = dec2bin (div n 2) ++ [0]
 
--- #5 
+
+-- #6 
 -- Verifica se uma dada string é hexadecimal ou não
 isHex :: String -> Bool
 isHex "" = False
