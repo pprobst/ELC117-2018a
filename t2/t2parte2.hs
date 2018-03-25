@@ -29,7 +29,7 @@ auxBin2Dec (x:xs) exp = x*(2^exp) + auxBin2Dec xs (exp-1)
 
 -- #4
 -- Mesmo que #3; não recursiva
-bin2dec' :: [Integer] -> Integer
+bin2dec' :: [Int] -> Int
 bin2dec' [] = undefined
 bin2dec' bits = foldl (\acc x -> acc*2 + x) 0 bits
 
