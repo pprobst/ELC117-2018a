@@ -40,12 +40,20 @@ countValids str = countAux str 0
 countChar :: Char -> String -> Int
 countChar ch str = length (filter (\c -> c == ch) str)
 
+-- #5
+-- Usando countValids, countChar e percent, retorna as frequências dos caracteres 
+-- ['a'..'z'] numa dada string. Com list comprehension!. A frequência de um 
+-- caracter é dada pelo percentual deste caracter entre os caracteres válidos 
+-- da string. 
+freqs :: String -> [Float]
+freqs str = [percentValChar ch str | ch <- ['a'..'z']]
+    where percentValChar ch str = percent (countChar ch str) (countValids str)
 
-{-
 -- Calcula percentagem: n/m*100
 percent :: Int -> Int -> Float
 percent n m = (fromIntegral n / fromIntegral m)*100
 
+{-
 -- Rotacao de uma lista para esquerda em n posicoes
 rotate :: Int -> [a] -> [a]
 rotate n xs = drop n xs ++ take n xs
