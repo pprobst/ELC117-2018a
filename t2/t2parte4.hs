@@ -9,12 +9,32 @@ decodeChar :: Int -> Char
 decodeChar n = chr (ord 'a' + n)
 
 -- #1
--- receber um caracter de 'a' a 'z', aplicará um deslocamento de 'n' unidades 
--- sobre ele, produzindo outro caracter no intervalo ['a'..'z']
+-- Recebe um caracter de 'a' a 'z' e aplica um deslocamento de 'n' unidades 
+-- sobre ele, produzindo outro caractere no intervalo ['a'..'z']
 shiftChar :: Char -> Int -> Char
 shiftChar ch n 
     | isLower ch = decodeChar (mod (encodeChar ch + n) 26)
     | otherwise = ch
+
+-- #2
+-- Codifica uma string usando um dado deslocamento; usa shiftChar
+encodeStr :: String -> Int -> String
+encodeStr str n = map (\ch -> shiftChar ch n) str
+
+-- #3
+-- Recebe uma string e retorna a quantidade de seus caracteres contidos no 
+-- intervalo ['a'..'z']
+--
+-- obs.: quis resolver usando recursão só para treinar um pouco; claro que com
+-- filter fica bem mais simples
+countValids :: String -> Int
+countValids str = countAux str 0
+    where
+        countAux [] valids = valids
+        countAux (x:xs) valids
+            | isLower x = countAux xs (valids+1)
+            | otherwise = countAux xs valids
+
 
 {-
 -- Calcula percentagem: n/m*100
