@@ -8,6 +8,15 @@ encodeChar c = ord c - ord 'a'
 decodeChar :: Int -> Char
 decodeChar n = chr (ord 'a' + n)
 
+-- #1
+-- receber um caracter de 'a' a 'z', aplicará um deslocamento de 'n' unidades 
+-- sobre ele, produzindo outro caracter no intervalo ['a'..'z']
+shiftChar :: Char -> Int -> Char
+shiftChar ch n 
+    | isLower ch = decodeChar (mod (encodeChar ch + n) 26)
+    | otherwise = ch
+
+{-
 -- Calcula percentagem: n/m*100
 percent :: Int -> Int -> Float
 percent n m = (fromIntegral n / fromIntegral m)*100
@@ -32,3 +41,5 @@ crack cs = encodeStr cs (-factor)
            where factor = head (positions (minimum chitab) chitab)
                  chitab = [ chi2 (rotate n table' ) table | n <- [0..25] ]
                  table' = freqs cs
+
+-}
