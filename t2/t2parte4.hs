@@ -72,14 +72,9 @@ table = [14.6, 1.0, 3.9, 5.0, 12.6, 1.0, 1.3, 1.3, 6.2, 0.4, 0.1, 2.8, 4.7,
 chi2 :: [Float] -> [Float] -> Float
 chi2 os es = sum [((o-e)^2)/e | (o,e) <- zip os es]
 
--- #EXTRA 1!
--- chi2 usando foldl
-chi2' :: [Float] -> [Float] -> Float
-chi2' os es = foldl (+) 0 [((o-e)^2)/e | (o,e) <- zip os es]
-
 -- Use esta funcao para decodificar uma mensagem!
 crack :: String -> String
 crack cs = encodeStr cs (-factor)
            where factor = head (positions (minimum chitab) chitab)
-                 chitab = [ chi2' (rotate n table' ) table | n <- [0..25] ]
+                 chitab = [ chi2 (rotate n table' ) table | n <- [0..25] ]
                  table' = freqs cs
