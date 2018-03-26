@@ -26,7 +26,7 @@ encodeStr str n = map (\ch -> shiftChar ch n) str
 -- intervalo ['a'..'z']
 --
 -- obs.: quis resolver usando recursão só para treinar um pouco; claro que com
--- filter fica bem mais simples
+-- filter (ver #4) fica bem mais simples
 countValids :: String -> Int
 countValids str = countAux str 0
     where
@@ -34,6 +34,11 @@ countValids str = countAux str 0
         countAux (x:xs) valids
             | isLower x = countAux xs (valids+1)
             | otherwise = countAux xs valids
+
+-- #4
+-- Retorna a quantidade de um dado caractere em uma string
+countChar :: Char -> String -> Int
+countChar ch str = length (filter (\c -> c == ch) str)
 
 
 {-
