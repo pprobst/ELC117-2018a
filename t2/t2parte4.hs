@@ -53,6 +53,11 @@ freqs str = [percentValChar ch str | ch <- ['a'..'z']]
 percent :: Int -> Int -> Float
 percent n m = (fromIntegral n / fromIntegral m)*100
 
+-- #6
+-- Retorna uma lista de posições de um dado número em uma lista
+positions :: Float -> [Float] -> [Int]
+positions n lst = map snd (filter (\x -> fst x == n) (zip lst [0..]))
+
 {-
 -- Rotacao de uma lista para esquerda em n posicoes
 rotate :: Int -> [a] -> [a]
