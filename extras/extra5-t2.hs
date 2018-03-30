@@ -12,12 +12,12 @@ crackHex :: String -> String
 crackHex str = intLst2string (words str)
 
 -- Converte uma lista de inteiros em seus respectivos caracteres ascii
-intLst2string :: [[Char]] -> [Char]
+intLst2string :: [String] -> String
 intLst2string lst = map (\n -> int2ascii n) (map (\x -> hex2int x) lst)
 
 -- Converte uma string hexadecimal para um número inteiro
 -- Ex.: "45" --> 69
-hex2int :: [Char] -> Int
+hex2int :: String -> Int
 hex2int lst = (head transHex)*16 + last transHex
     where transHex = map (\x -> digitToInt x) lst
 
