@@ -1,3 +1,9 @@
+--------------------------
+-- ELC117-2018a         --
+-- T2 - PARTE 3         --
+-- PEDRO PROBST MININI  --
+--------------------------
+
 -- A codificação EAN-13 é um padrão de código de barras usado em vários 
 -- tipos de produtos. O número codificado em barras tem 13 dígitos (0-9),
 -- sendo o último um dígito verificador (exemplo: 5901234123457, dígito 

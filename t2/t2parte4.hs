@@ -1,3 +1,9 @@
+--------------------------
+-- ELC117-2018a         --
+-- T2 - PARTE 4         --
+-- PEDRO PROBST MININI  --
+--------------------------
+
 import Data.Char
 
 -- Converte um caracter em um inteiro

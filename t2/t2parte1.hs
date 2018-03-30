@@ -1,3 +1,9 @@
+--------------------------
+-- ELC117-2018a         --
+-- T2 - PARTE 1         --
+-- PEDRO PROBST MININI  --
+--------------------------
+
 -- #1
 -- Produz uma lista com n tuplas, cada tupla com números de n a 1 e seus 
 -- respectivos quadrados:
