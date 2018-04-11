@@ -66,3 +66,11 @@ potenciasAux(N, LIM, L) :-
     N2 is 2^N,
     potenciasAux(N1, LIM, L2),
     L = [N2|L2].
+
+% (7)
+% Defina um predicado positivos(L1,L2), de forma que L2 seja uma lista só 
+% com os elementos positivos de L1.
+% (passado em aula!)
+positivos([], []).
+positivos([H|T], L) :- H > 0, positivos(T, Resto), L = [H|Resto].
+positivos([H|T], L) :- H =< 0, positivos(T, L).
