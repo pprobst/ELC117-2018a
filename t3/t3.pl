@@ -53,3 +53,16 @@ zipmult(L1, L2, L3) :-
     zipmult(T1, T2, L),
     L3 = [ELEM|L].
 
+% (6)
+% Defina um predicado potencias(N,L), de forma que L seja uma lista com 
+% as N primeiras potências de 2, sendo a primeira 2^0 e assim por diante.
+
+potencias(N, L) :- potenciasAux(N-N, N, L).
+
+potenciasAux(LIM, LIM, []).
+potenciasAux(N, LIM, L) :-
+    N < LIM,
+    N1 is N+1,
+    N2 is 2^N,
+    potenciasAux(N1, LIM, L2),
+    L = [N2|L2].
