@@ -74,3 +74,19 @@ potenciasAux(N, LIM, L) :-
 positivos([], []).
 positivos([H|T], L) :- H > 0, positivos(T, Resto), L = [H|Resto].
 positivos([H|T], L) :- H =< 0, positivos(T, L).
+
+% (8)
+% Considere que L1 e L2 sejam permutações de uma lista de elementos 
+% distintos, sem repetições. Sabendo disso, defina um predicado 
+% mesmaPosicao(A,L1,L2) para verificar se um elemento A está na mesma 
+% posição nas listas L1 e L2. 
+
+calcIndice([H|_], H, 0).
+calcIndice([_|T], V, I) :-
+    calcIndice(T, V, I1),
+    I is I1+1.
+
+mesmaPosicao(A, L1, L2) :-
+    calcIndice(L1, A, POS1),
+    calcIndice(L2, A, POS2),
+    POS1 is POS2.
