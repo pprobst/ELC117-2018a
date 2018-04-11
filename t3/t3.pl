@@ -17,3 +17,10 @@ zeroInit(L) :-
 % de 5 elementos. Resolva este exercício sem usar um predicado aux.
 
 has5(L) :- L = [_,_,_,_,_].
+
+% (3)
+% Defina um predicado hasN(L,N) que é verdadeiro se L for uma lista 
+% de N elementos.
+
+hasN([], 0).
+hasN(L, N) :- length(L,N).
