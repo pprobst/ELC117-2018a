@@ -70,6 +70,7 @@ potenciasAux(N, LIM, L) :-
 % (7)
 % Defina um predicado positivos(L1,L2), de forma que L2 seja uma lista só 
 % com os elementos positivos de L1.
+
 % (passado em aula!)
 positivos([], []).
 positivos([H|T], L) :- H > 0, positivos(T, Resto), L = [H|Resto].
@@ -90,3 +91,33 @@ mesmaPosicao(A, L1, L2) :-
     calcIndice(L1, A, POS1),
     calcIndice(L2, A, POS2),
     POS1 is POS2.
+
+% (9)
+% Dada uma lista de N alunos, deseja-se escolher NP alunos (NP < N) para 
+% formar uma comissão. Para isso, defina um predicado comissao(NP,LP,C), 
+% que permita gerar as possíveis combinações C com NP elementos da lista LP.
+
+% OBS.: Honestamente, quebrei a cabeça com isso e não consegui fazer.
+% Peguei a solução daqui: https://waa.ai/zLGA
+% Entretanto, tentarei explicar do modo como entendi:
+% - comissao(NP, LP, C):
+%   > O caso mais simples e se for selecionado 0 elementos: neste caso,
+%   C deve ser uma lista vazia!
+%   > Se NP > 0, chamamos pegaResto com LP sendo a lista;
+%   > pegaResto continuará uma vez por elemento H de LP.
+%
+% - pegaResto(X, [_|L], C):
+%   > C é [_|L] com todos os elementos após X.
+%   > Ou seja, "percorre" a lista até que o Head seja X, portanto, 
+%   se head(lista) == x, então tail(lista) == C (caso mais simples).
+
+comissao(0, _, []).
+comissao(NP, LP, C) :- 
+    [H|T] = C,
+    NP > 0,
+    NP1 is NP - 1,
+    pegaResto(H, LP, Resto),
+    comissao(NP1, Resto, T).
+
+pegaResto(X, [X|L], L).
+pegaResto(X, [_|L], C) :- pegaResto(X, L, C).
