@@ -46,7 +46,6 @@ potN0(N, L) :-
 
 zipmult([], _, 0).
 zipmult(_, [], 0).
-
 zipmult(L1, L2, L3) :-
     [H1|T1] = L1,
     [H2|T2] = L2,
