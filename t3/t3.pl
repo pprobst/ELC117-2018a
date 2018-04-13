@@ -166,7 +166,7 @@ pegaResto(X, [_|L], T) :- pegaResto(X, L, T).
 %            1 quadrado de 4 azulejos. 
 %            2 quadrados de 1 azulejo.
 %            -------------------------
-% Total:     4 azulejos.
+% Total:     4 quadrados; 31 azulejos.
 
 % Uma tradução direta do algoritmo acima pode ser vista abaixo:
 azulejos(0, 0). % caso base: se tivermos 0 azulejos, obviamente não
