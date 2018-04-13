@@ -141,7 +141,8 @@ pegaResto(X, [_|L], T) :- pegaResto(X, L, T).
 % -> Um quadrado de azulejos deve ter um número de azulejos tal que este
 %    seja um quadrado perfeito.
 % 
-% O modus operandi para obtermos 4 quadrados de 31 azulejos é o seguinte:
+% O modus operandi para obtermos os 4 maiores quadrados possíveis a partir 
+% de 31 azulejos é o seguinte:
 % 1)  Extraímos a raiz de 31 => 5.56
 % 2)  Fazemos o "floor" de 5.56 => 5
 % 3)  Elevamos 5 ao quadrado => 5^2 => 25
