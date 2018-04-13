@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% T3 - Programação lógica em Prolog %%%
 %%%        PEDRO PROBST MININI        %%%
-%%%            2018-04-11             %%%
+%%%            2018-04-13             %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % (1)
@@ -100,13 +100,16 @@ mesmaPosicao(A, L1, L2) :-
 % OBS.: Honestamente, quebrei a cabeça com isso e não consegui fazer.
 % Peguei a solução daqui: https://waa.ai/zLGA
 % Entretanto, tentarei explicar do modo como entendi:
+%
 % - comissao(NP, LP, C):
 %   > O caso mais simples e se for selecionado 0 elementos: neste caso,
 %   C deve ser uma lista vazia!
 %   > Se NP > 0, chamamos pegaResto com LP sendo a lista;
 %   > pegaResto continuará uma vez por elemento H de LP.
+%   > Assim ele "junta" os elementos da combinação em ordem, 
+%     fazendo uso de backtracking em árvore (ver trace).
 %
-% - pegaResto(X, [_|L], C):
+% - pegaResto(X, [_|L], T):
 %   > C é [_|L] com todos os elementos após X.
 %   > Ou seja, "percorre" a lista até que o Head seja X, portanto, 
 %   se head(lista) == x, então tail(lista) == C (caso mais simples).
@@ -120,4 +123,58 @@ comissao(NP, LP, C) :-
     comissao(NP1, Resto, T).
 
 pegaResto(X, [X|L], L).
-pegaResto(X, [_|L], C) :- pegaResto(X, L, C).
+pegaResto(X, [_|L], T) :- pegaResto(X, L, T).
+
+
+% (10)
+% (Adaptado de OBI2006-F1N1) Tem-se N azulejos 10cm x 10cm e, com eles, 
+% deve-se montar um conjunto de quadrados de modo a utilizar todos os 
+% azulejos dados, sem sobrepô-los. Inicialmente, deve-se montar o maior 
+% quadrado possível; então, com os azulejos que sobraram, deve-se montar 
+% o maior quadrado possível, e assim sucessivamente. Por exemplo, se forem 
+% dados 31 azulejos, o conjunto montado terá 4 quadrados. Para resolver 
+% este problema, você deverá definir um predicado azulejos(NA, NQ), de forma
+% que NQ seja o número de quadrados que se deve montar com NA azulejos. 
+% Dica: use os predicados sqrt e floor, pré-definidos em Prolog.
+
+% Para resolvermos isso, temos de nos atentar a certo fato:
+% -> Um quadrado de azulejos deve ter um número de azulejos tal que este
+%    seja um quadrado perfeito.
+% 
+% O modus operandi para obtermos 4 quadrados de 31 azulejos é o seguinte:
+% 1)  Extraímos a raiz de 31 => 5.56
+% 2)  Fazemos o "floor" de 5.56 => 5
+% 3)  Elevamos 5 ao quadrado => 5^2 => 25
+%     O maior quadrado possível é de 25 azulejos.
+% 4)  31 - 25 = 6; Ainda sobram 6 azulejos.
+%     Neste caso, repetimos o processo acima para 6.
+% 5)  Raiz de 6 => 2.449i
+% 6)  Floor de 2.49 => 2
+% 7)  2^2 = 4.
+%     O maior quadrado possível é com 4 azulejos.
+% 8)  6 - 4 = 2; Ainda sobram 2 azuejos.
+%     Repetimos o processo.
+% 9)  Raiz de 2 = 1.41
+% 10) Floor de 1.41 = 1
+% 11) 1^2 = 1
+%     O maior quadrado possível é de 1 azulejo.
+% 12) 2 - 1 = 1; Ainda sobra 1 azulejo.
+% 13) Podemos fazer apenas mais um quadrado com um azulejo.
+% ----------------------------------------------------------
+% Resultado: 1 quadrado de 25 azulejos.
+%            1 quadrado de 4 azulejos. 
+%            2 quadrados de 1 azulejo.
+%            -------------------------
+% Total:     4 azulejos.
+
+% Uma tradução direta do algoritmo acima pode ser vista abaixo:
+azulejos(0, 0). % caso base: se tivermos 0 azulejos, obviamente não
+                % poderemos formar um quadrado.
+
+azulejos(NA, NQ) :-
+    SQRT is sqrt(NA), % pega a raiz de NA
+    INT is floor(SQRT), % pega a parte inteira de sqrt(NA)
+    TAM_QUADRADO is INT^2, % tamanho do quadrado em nº de azulejos
+    RESTO is NA-TAM_QUADRADO, % azulejos restantes para a próxima chamada
+    azulejos(RESTO, NQ1),
+    NQ is NQ1+1. % incrementa o número de quadrados
