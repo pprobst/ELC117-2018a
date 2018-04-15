@@ -110,9 +110,9 @@ mesmaPosicao(A, L1, L2) :-
 %     fazendo uso de backtracking em árvore (ver trace).
 %
 % - pegaResto(X, [_|L], T):
-%   > C é [_|L] com todos os elementos após X.
+%   > T é [_|L] com todos os elementos após X.
 %   > Ou seja, "percorre" a lista até que o Head seja X, portanto, 
-%   se head(lista) == x, então tail(lista) == C (caso mais simples).
+%     se head(lista) == x, então tail(lista) == T (caso mais simples).
 
 comissao(0, _, []).
 comissao(NP, LP, C) :- 
