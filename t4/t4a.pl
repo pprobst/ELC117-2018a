@@ -46,6 +46,22 @@ regra3(CD) :-
     nth0(Iw, CD, w),
     It < Iw.
 
+% Um sucesso de rock está na sexta posição (5)
+regra4(CD) :-
+    nth0(5, CD, X),
+    sucessoRock(X).
+
+% Cada sucesso de rock é precedido por uma composição original
+regra5(CD) :- 
+    nextto(composicaoOriginal(_), sucessoRock(_), CD).
+
+% Z é um sucesso de rock
+sucessoRock(z). % regra6
+
+% Composição original
+composicaoOriginal(X) :-
+    nextto(sucessoRock(_), X, _).
+
 % Permutação
 perm([],[]).
 perm(List, [H|Perm]) :- delete(H, List, Rest), perm(Rest, Perm).
@@ -60,7 +76,9 @@ faixas(CD) :-
     perm(Musicas, CD),
     regra1(CD),
     regra2(CD),
-    regra3(CD).
+    regra3(CD),
+    regra4(CD).
+    %regra5(CD).
 
 
 % Questão 1. 
