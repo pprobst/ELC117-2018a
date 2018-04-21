@@ -4,7 +4,7 @@
 %%%            2018-04-21             %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% -------------------------------------------------------------------------------
 % Uma banda formada por alunos e alunas da escola está gravando um CD com       %
 % exatamente sete músicas distintas – S, T, V, W, X, Y e Z. Cada música ocupa   %
 % exatamente uma das sete faixas contidas no CD. Algumas das músicas são        %
@@ -27,8 +27,7 @@
 %                                                                               %
 % * Z é um sucesso de rock.                                                     %
 %                                                                               %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+% -------------------------------------------------------------------------------
 
 % S ocupa a quarta faixa do CD
 regra1(CD) :- CD = [_, _, _, s, _, _, _].
@@ -62,3 +61,15 @@ faixas(CD) :-
     regra1(CD),
     regra2(CD),
     regra3(CD).
+
+
+% Questão 1. 
+% ----------
+% Qual das seguintes alternativas poderia ser a ordem das músicas no CD, da 
+% primeira para a sétima faixa? 
+%
+% ?- faixas([t, w, v, s, y, x, z]).
+% ?- faixas([v, y, t, s, w, z, x]).
+% ?- faixas([x, y, w, s, t, z, s]).
+% ?- faixas([y, t, w, s, x, z, v]).
+% ?- faixas([z, t, x, w, v, y, s]).
