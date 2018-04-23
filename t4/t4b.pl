@@ -71,7 +71,7 @@ apresentacoes(A) :-
     regra2(A),
     regra3(A),
     regra4(A),
-    regra5(A), !.
+    regra5(A).
 
 
 % Questão 9. 
