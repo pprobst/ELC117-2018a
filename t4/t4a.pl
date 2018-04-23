@@ -29,6 +29,9 @@
 %                                                                               %
 % -------------------------------------------------------------------------------
 
+% OBS.: solução inspirada por:  
+% https://github.com/AndreaInfUFSM/elc117-2018a/blob/master/trabalhos/t4/obi-estacionamento.pl
+
 % S ocupa a quarta faixa do CD
 regra1(CD) :- CD = [_, _, _, s, _, _, _].
 
@@ -46,18 +49,20 @@ regra3(CD) :-
     nth0(Iw, CD, w),
     It < Iw.
 
-% Um sucesso de rock está na sexta posição (5)
+% Um sucesso de rock está na sexta posição (índice 5)
 regra4(CD) :-
-    nth0(5, CD, X),
-    sucessoRock(X).
-
-% Cada sucesso de rock é precedido por uma composição original
+    faixa(X, rock),
+    nth0(5, CD, X).
+    
+% Cada sucesso de rock é precedido por uma composição da banda
 regra5(CD) :-
-    sucessoRock(X),
-    nextto(_, X, CD).
+    faixa(X, rock),
+    faixa(Y, banda),
+    nextto(Y, X, CD).
 
 % Z é um sucesso de rock
-sucessoRock(z).
+faixa(z, rock).
+faixa(_, banda).
 
 % Permutação
 perm([],[]).
@@ -88,3 +93,5 @@ faixas(CD) :-
 % ?- faixas([x, y, w, s, t, z, s]).
 % ?- faixas([y, t, w, s, x, z, v]).
 % ?- faixas([z, t, x, w, v, y, s]).
+
+% CORRETA: faixas([y, t, w, s, x, z, v]).
