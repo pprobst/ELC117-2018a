@@ -1,0 +1,3 @@
+# Desnecessário, mas coloquei apenas por questões de completude...
+print("Olá mundo!")
+
