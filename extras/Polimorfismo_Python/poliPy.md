@@ -40,7 +40,7 @@ class PeixePalhaco():
         print("O peixe-palhaco está nadando.")
 
     def nadar_para_tras(self): 
-        ("O peixe-palhaco pode nadar para trás.")
+        print("O peixe-palhaco pode nadar para trás.")
 
     def esqueleto(self):
         print("O esqueleto do peixe-palhaco é feito de osso.")
