@@ -1,4 +1,4 @@
-## Okaeri
+# Okaeri
 
 *Okaeri (おかえり)* is a simple homepage generator written in Python. It's composed of 5
 files:
@@ -10,14 +10,14 @@ files:
     - `dark.css`
     - `homepage.html`
     
-#### Dependencies
+### Dependencies
 * [Mako](http://www.makotemplates.org/)
 
 You can use your own fonts, but I encourage you to install
 [Overpass](http://overpassfont.org/) and
 [jackeyfont](http://nonty.net/font/jackey_font/knsw_jackey_font.zip)
 
-#### How to use
+### How to use
 First, you'd like to edit `links.oka` to fit your own needs. In this file, we'll have sections
 like the following:
 ```
