@@ -11,12 +11,13 @@ public class Vertice extends Pane {
     private double x;
     private double y;
 
-    public Vertice(String label, double x, double y, MouseEvent e) {
+    public Vertice(String label, double x, double y) {
         this.label = label;
-        this.x = e.getX();
-        this.y = e.getY();
+        this.x = x;
+        this.y = y;
         Circle c = new Circle(x, y, 25, Color.BLACK);
         Label lab =  new Label(label);
+        getChildren().addAll(c, lab);
     }
 
     public String vertLabel() {

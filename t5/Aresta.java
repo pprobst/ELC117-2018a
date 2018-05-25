@@ -2,12 +2,13 @@ package t5;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
+import javafx.scene.layout.Pane;
 
-public class Aresta extends Line {
+public class Aresta extends Pane {
     private Vertice origem;
     private Vertice destino;
 
-    public Aresta(Vertice origem, Vertice destino, MouseEvent e) {
+    public Aresta(Vertice origem, Vertice destino) {
         this.origem = origem;
         this.destino = destino;
         Line l = new Line();
@@ -15,6 +16,7 @@ public class Aresta extends Line {
         l.setStartY(origem.vertY());
         l.setEndX(destino.vertX());
         l.setEndY(destino.vertY());
+        getChildren().add(l);
     }
 
     public Vertice arestaOrigem() {
