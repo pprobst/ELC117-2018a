@@ -22,5 +22,14 @@ public class Grafo {
         return arestas.size();
     }
 
-    // Por enquanto isso...
+    // Reseta a configuração do grafo
+    public void resetaGrafo() {
+        vertices.clear();
+        arestas.clear();
+    }
+
+    // Retorna o número de arestas sobrepostas
+    public int arestasSobrepostas() {
+       return 5;  
+    }
 }

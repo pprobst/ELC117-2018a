@@ -24,6 +24,8 @@ public class Aresta extends Pane {
         if (this.cor == "Azul") l.setStyle("-fx-stroke: blue;");
         else if (this.cor == "Vermelho") l.setStyle("-fx-stroke: red;");
         else l.setStyle("-fx-stroke: black;");
+        if (formato == "Descontínua") 
+              l.getStrokeDashArray().addAll(5.0, 10.0, 5.0, 10.0);
         l.setStartX(this.origem.vertX());
         l.setStartY(this.origem.vertY());
         l.setEndX(this.destino.vertX());
