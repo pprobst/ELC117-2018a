@@ -19,18 +19,15 @@ public class Aresta extends Pane {
     }
 
     public Line criaAresta() {
-        Line l = new Line();
+        Line l = new Line(this.origem.vertX(), this.origem.vertY(), 
+                          this.destino.vertX(), this.destino.vertY());
 
         if (this.cor == "Azul") l.setStyle("-fx-stroke: blue;");
         else if (this.cor == "Vermelho") l.setStyle("-fx-stroke: red;");
         else l.setStyle("-fx-stroke: black;");
         if (formato == "Descontínua") 
               l.getStrokeDashArray().addAll(5.0, 10.0, 5.0, 10.0);
-        l.setStartX(this.origem.vertX());
-        l.setStartY(this.origem.vertY());
-        l.setEndX(this.destino.vertX());
-        l.setEndY(this.destino.vertY());
-
+      
         return l;
     }
 
