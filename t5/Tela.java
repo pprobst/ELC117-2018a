@@ -158,6 +158,8 @@ public class Tela extends Application {
                         arestas.add(aresta);
                         pane.getChildren().add(aresta.criaAresta());
                         cont = 1;
+                        origem.vertShape().toFront();
+                        destino.vertShape().toFront();
                         origem.vertShape().setEffect(null);
                     } else cont = 2;
                 }
