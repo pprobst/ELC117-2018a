@@ -16,15 +16,20 @@ public class Aresta extends Pane {
         this.destino = destino;
         this.cor = cor;
         this.formato = formato;
+    }
+
+    public Line criaAresta() {
         Line l = new Line();
-        if (cor == "Azul") l.setStyle("-fx-stroke: blue;");
-        else if (cor == "Vermelho") l.setStyle("-fx-stroke: red;");
+
+        if (this.cor == "Azul") l.setStyle("-fx-stroke: blue;");
+        else if (this.cor == "Vermelho") l.setStyle("-fx-stroke: red;");
         else l.setStyle("-fx-stroke: black;");
-        l.setStartX(origem.vertX());
-        l.setStartY(origem.vertY());
-        l.setEndX(destino.vertX());
-        l.setEndY(destino.vertY());
-        getChildren().add(l);
+        l.setStartX(this.origem.vertX());
+        l.setStartY(this.origem.vertY());
+        l.setEndX(this.destino.vertX());
+        l.setEndY(this.destino.vertY());
+
+        return l;
     }
 
     public Vertice arestaOrigem() {
