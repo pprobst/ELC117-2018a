@@ -20,8 +20,11 @@ public class Aresta extends Pane {
     }
 
     public Line criaAresta() {
-        Line l = new Line(this.origem.vertX(), this.origem.vertY(), 
-                          this.destino.vertX(), this.destino.vertY());
+        double origemX = this.origem.vertX();
+        double origemY = this.origem.vertY();
+        double destinoX = this.destino.vertX();
+        double destinoY = this.destino.vertY();
+        Line l = new Line(origemX, origemY, destinoX, destinoY);
 
         if (this.cor == "Azul") l.setStyle("-fx-stroke: blue;");
         else if (this.cor == "Vermelho") l.setStyle("-fx-stroke: red;");

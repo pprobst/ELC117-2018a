@@ -3,6 +3,7 @@ package t5;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import java.util.ArrayList;
 
 public class Vertice extends Pane {
     private double raio = 25;
@@ -13,12 +14,14 @@ public class Vertice extends Pane {
     private String formato;
     private Shape shape;
     private Vertice destino;
+    private ArrayList<Aresta> arestasConectadas;
 
     public Vertice(double x, double y, String cor, String formato) {
         this.x = x;
         this.y = y;
         this.cor = cor;
         this.formato = formato;
+        this.arestasConectadas = new ArrayList<Aresta>();
     }
 
     public Shape criaVert() {
@@ -56,13 +59,13 @@ public class Vertice extends Pane {
         return this.y;
     }
 
-    public double vertQuadX() {
+    public double vertTamCentroX() {
         if (this.formato == "Quadrado") 
             return this.x-(this.tamQuad/2);
         return this.vertX();
     }
 
-    public double vertQuadY() {
+    public double vertTamCentroY() {
         if (this.formato == "Quadrado") 
             return this.y-(this.tamQuad/2);
         return this.vertY();
@@ -76,12 +79,22 @@ public class Vertice extends Pane {
         }
     }
 
-    public void vertConecta(Vertice destino) {
+    public void vertConecta(Vertice destino, Aresta aresta) {
         this.destino = destino;
+        if (this != destino && aresta != null) {
+            arestasConectadas.add(aresta);
+        }
     }
     
     public Vertice vertConectado() {
         return this.destino;
     }
 
+    public int vertQuantArestas() {
+        return this.arestasConectadas.size();
+    }
+
+    public ArrayList vertArestasConectadas() {
+        return this.arestasConectadas;
+    }
 }

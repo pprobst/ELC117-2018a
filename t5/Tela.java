@@ -155,7 +155,7 @@ public class Tela extends Application {
                 if (cont == 1) {
                     origem = v;
                     origem.vertShape().setEffect(sombra);
-                    origem.vertConecta(origem);
+                    origem.vertConecta(origem, null);
                     cont = 2;
                 }
                 else if (cont == 2) { 
@@ -167,11 +167,11 @@ public class Tela extends Application {
                         arestas.add(aresta);
                         pane.getChildren().add(aresta.criaAresta());
                         cont = 1;
-                        origem.vertConecta(destino);
-                        destino.vertConecta(origem);
+                        origem.vertConecta(destino, aresta);
+                        destino.vertConecta(origem, aresta);
                         origem.vertShape().setEffect(null);
-                        origem.vertShape().toFront();
-                        destino.vertShape().toFront();
+                        //origem.vertShape().toFront();
+                        //destino.vertShape().toFront();
                     } else cont = 2;
                 }
             });
@@ -237,9 +237,9 @@ public class Tela extends Application {
                                     "' stroke='black' stroke-width='2' fill='" + cor + "'/>");
                 }
                 else {
-                    escreve.println("<rect x='" + v.vertQuadX() + "' y='" + v.vertQuadY() + "' width='" + tam + 
-                                    "' height='" + tam + "' style='fill:" + cor + ";stroke-width:2" + 
-                                    ";stroke:black" + "'/>");
+                    escreve.println("<rect x='" + v.vertTamCentroX() + "' y='" + v.vertTamCentroY() + 
+                                    "' width='" + tam + "' height='" + tam + "' style='fill:" + cor + 
+                                    ";stroke-width:2" + ";stroke:black" + "'/>");
                 }
             }
             // Escreve informações sobre o grafo no SVG

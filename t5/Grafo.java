@@ -15,30 +15,47 @@ public class Grafo {
 
     // Retorna o número de vértices
     public int numVertices() {
-        return vertices.size();
+        return this.vertices.size();
     }
 
     // Retorna o número de arestas
     public int numArestas() {
-        return arestas.size();
+        return this.arestas.size();
     }
 
     // Reseta a configuração do grafo
     public void resetaGrafo() {
-        vertices.clear();
-        arestas.clear();
+        this.vertices.clear();
+        this.arestas.clear();
     }
 
-    // Retorna o número de arestas sobrepostas
-    public int arestasSobrepostas() {
-        int contSobrepos = 0;
-        for (int i = 0; i < arestas.size(); i++) {
-            for (int j = i+1; j < arestas.size();  j++) {
-                Shape intersect = Shape.intersect(arestas.get(i).arestaLinha(), 
-                                                  arestas.get(j).arestaLinha());
-                if (intersect.getBoundsInLocal().getWidth() != -1) contSobrepos++;
+    // Retorna o TOTAL de arestas sobrepostas
+    public int sobreposArestas(ArrayList<Aresta> listaAresta) {
+        int cont = 0;
+        for (int i = 0; i < listaAresta.size(); i++) {
+            for (int j = i+1; j < listaAresta.size();  j++) {
+                Shape intersect = Shape.intersect(listaAresta.get(i).arestaLinha(), 
+                                                  listaAresta.get(j).arestaLinha());
+                if (intersect.getBoundsInLocal().getWidth() != -1) 
+                    cont++;
             }
         }
-        return contSobrepos;
+        return cont;
+    }
+
+    // Returna o TOTAL de arestas sobrepostas dentro de um vértice
+    public int sobreposArestVert() {
+        int cont = 0;
+        for (Vertice v : this.vertices) {
+            ArrayList<Aresta> conexoes = v.vertArestasConectadas();
+            cont += sobreposArestas(conexoes);
+        }
+        return cont;
+    }
+
+    // Retorna o número de arestas sobrepostas do grafo, exluindo as sobreposições
+    // de dentro dos vértices
+    public int arestasSobrepostas() {
+        return sobreposArestas(this.arestas) - sobreposArestVert();
     }
 }
