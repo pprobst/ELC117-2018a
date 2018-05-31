@@ -21,6 +21,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.geometry.Insets;
 import java.util.ArrayList;
 import javafx.scene.control.Tooltip;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Tela extends Application {
     private Grafo grafo;
@@ -81,7 +84,7 @@ public class Tela extends Application {
 
         // Funções dos botões/choiceboxes do menu ao clicá-los
         clicaMenu(stage, btnVertice, btnAresta, btnSair, btnSVG, btnNovoGrafo, 
-                  btnInfo, cbCor, cbFormatoVert, cbFormatoArest);
+                btnInfo, cbCor, cbFormatoVert, cbFormatoArest);
 
         // Adiciona botões/choiceboxes no menu
         menu.getChildren().addAll(btnVertice, btnAresta, cbCor, cbFormatoVert,  
@@ -89,7 +92,7 @@ public class Tela extends Application {
                                   btnSair);
         borderPane.setTop(menu);
         borderPane.setCenter(pane);
-        
+
         // Faz a cena
         Scene scene = new Scene(borderPane, 800, 600);
         stage.setScene(scene);
@@ -119,11 +122,13 @@ public class Tela extends Application {
 
         btnNovoGrafo.setOnMouseClicked(e -> {
             pane.getChildren().clear();
-            grafo.resetaGrafo();
+            vertices.clear();
+            arestas.clear();
+            if (grafo != null) grafo.resetaGrafo();
         });
 
         btnInfo.setOnMouseClicked(e -> {
-            grafo = new Grafo(vertices, arestas);
+            if (grafo == null) grafo = new Grafo(vertices, arestas);
             Alert infoGrafo = new Alert(AlertType.INFORMATION);
             infoGrafo.setContentText("Vértices: " + grafo.numVertices() +
                                      "\nArestas: " + grafo.numArestas() + 
@@ -133,7 +138,11 @@ public class Tela extends Application {
         });
 
         btnSVG.setOnMouseClicked(e -> {
-            // salva em SVG
+            if (grafo == null) grafo = new Grafo(vertices, arestas);
+            criaSVG(grafo);
+            Alert avisoSalvo = new Alert(AlertType.INFORMATION);
+            avisoSalvo.setHeaderText("O grafo foi salvo!");
+            avisoSalvo.showAndWait();
         });
     }
 
@@ -146,21 +155,23 @@ public class Tela extends Application {
                 if (cont == 1) {
                     origem = v;
                     origem.vertShape().setEffect(sombra);
+                    origem.vertConecta(origem);
                     cont = 2;
                 }
                 else if (cont == 2) { 
                     destino = v;
                     formatoArestAtual = cbFormatoArest.getValue().toString();
                     corAtual = cbCor.getValue().toString();
-                    if (destino != origem) {
-                        Aresta aresta = new Aresta(origem, destino, corAtual, 
-                                                   formatoArestAtual);
+                    if (destino != origem && (origem.vertConectado() != destino.vertConectado())) {
+                        Aresta aresta = new Aresta(origem, destino, corAtual, formatoArestAtual);
                         arestas.add(aresta);
                         pane.getChildren().add(aresta.criaAresta());
                         cont = 1;
+                        origem.vertConecta(destino);
+                        destino.vertConecta(origem);
+                        origem.vertShape().setEffect(null);
                         origem.vertShape().toFront();
                         destino.vertShape().toFront();
-                        origem.vertShape().setEffect(null);
                     } else cont = 2;
                 }
             });
@@ -169,30 +180,82 @@ public class Tela extends Application {
 
     // Desenha vértice
     public void fazVertice(ChoiceBox cbCor, ChoiceBox cbFormatoVert) {
-        if (estado) {
-            pane.setOnMouseClicked(e0 -> {
-                formatoVertAtual= cbFormatoVert.getValue().toString();
-                corAtual = cbCor.getValue().toString();
-                if (estado) {
-                    Vertice vertice = new Vertice(e0.getX(), e0.getY(), corAtual, 
-                            formatoVertAtual);
-                    Shape desenho = vertice.criaVert();
-                    if (!conflitoVert(desenho) && !(e0.getTarget() instanceof Shape)) {
-                        vertices.add(vertice);
-                        pane.getChildren().add(desenho);
-                    }
+        pane.setOnMouseClicked(e0 -> {
+            formatoVertAtual= cbFormatoVert.getValue().toString();
+            corAtual = cbCor.getValue().toString();
+            if (estado) {
+                Vertice vertice = new Vertice(e0.getX(), e0.getY(), corAtual, formatoVertAtual);
+                Shape desenho = vertice.criaVert();
+                if (!conflitoVert(desenho) && !(e0.getTarget() instanceof Shape)) {
+                    vertices.add(vertice);
+                    pane.getChildren().add(desenho);
                 }
-            });
-        }
+            }
+        });
     }
 
-    // Verifica se há conflito na posição clicada
+    // Verifica se há conflito no momento de inserir um novo vértice
     public boolean conflitoVert(Shape vertAtual) {
         for (Vertice v : vertices) {
             Shape intersect = Shape.intersect(v.vertShape(), vertAtual);
             if (intersect.getBoundsInLocal().getWidth() != -1) return true;
         }
         return false;
+    }
+
+    // Cria o arquivo SVG do grafo para ser visualizado em um browser
+    public void criaSVG(Grafo grafo) {
+        try {
+            File arq = new File("grafo.svg");
+            arq.createNewFile();
+            PrintWriter escreve = new PrintWriter(arq);
+            String header = ("<svg version='1.1' xmlns='http://www.w3.org/2000/svg'" +
+                             " xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 1024 768'" +
+                             " preserveAspectRatio='xMidYMid meet'>");
+            escreve.println(header);
+
+            // Desenha as arestas no SVG
+            for (Aresta a : arestas) {
+                double x1 = a.arestaOrigem().vertX();
+                double y1 = a.arestaOrigem().vertY();
+                double x2 = a.arestaDestino().vertX();
+                double y2 = a.arestaDestino().vertY();
+                String cor = a.arestaCor();
+                escreve.println("<line x1='" + x1 + "' y1='" + y1 + "' x2='" + x2 + 
+                                "' y2='" + y2 + "' style='stroke:" + cor + ";stroke-width:2");
+                if (a.arestaDescontinua())
+                    escreve.print(";stroke-dasharray:5px,10px,5px,10px;");
+                escreve.print("'/>");
+            }
+
+            // Desenha os vértices no SVG
+            for (Vertice v : vertices) {
+                double tam = v.vertTam();
+                String cor = v.vertCor();
+                if (v.vertFormato() == "Círculo") {
+                    escreve.println("<circle cx='" + v.vertX() + "' cy='" + v.vertY() + "' r='" + tam + 
+                                    "' stroke='black' stroke-width='2' fill='" + cor + "'/>");
+                }
+                else {
+                    escreve.println("<rect x='" + v.vertQuadX() + "' y='" + v.vertQuadY() + "' width='" + tam + 
+                                    "' height='" + tam + "' style='fill:" + cor + ";stroke-width:2" + 
+                                    ";stroke:black" + "'/>");
+                }
+            }
+            // Escreve informações sobre o grafo no SVG
+            int numVert = grafo.numVertices();
+            int numArest = grafo.numArestas();
+            int arestSobrepost = grafo.arestasSobrepostas();
+            escreve.println("<text x='150' y='650' fill='black'>" + 
+                            "\nnumVert: " + numVert +" numArest: " + numArest + 
+                            " arestSobrepost: " + arestSobrepost + "</text>");
+
+            escreve.println("</svg>");
+            escreve.close();
+        } 
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Lança o programa

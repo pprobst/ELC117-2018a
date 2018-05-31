@@ -1,5 +1,6 @@
 package t5;
 
+import javafx.scene.shape.*;
 import java.util.ArrayList;
 
 public class Grafo {
@@ -30,6 +31,14 @@ public class Grafo {
 
     // Retorna o número de arestas sobrepostas
     public int arestasSobrepostas() {
-       return 5;  
+        int contSobrepos = 0;
+        for (int i = 0; i < arestas.size(); i++) {
+            for (int j = i+1; j < arestas.size();  j++) {
+                Shape intersect = Shape.intersect(arestas.get(i).arestaLinha(), 
+                                                  arestas.get(j).arestaLinha());
+                if (intersect.getBoundsInLocal().getWidth() != -1) contSobrepos++;
+            }
+        }
+        return contSobrepos;
     }
 }

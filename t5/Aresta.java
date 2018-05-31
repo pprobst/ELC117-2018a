@@ -9,6 +9,7 @@ public class Aresta extends Pane {
     private Vertice origem;
     private Vertice destino;
     private String formato;
+    private Line linha;
     private String cor;
 
     public Aresta(Vertice origem, Vertice destino, String cor, String formato) {
@@ -25,17 +26,33 @@ public class Aresta extends Pane {
         if (this.cor == "Azul") l.setStyle("-fx-stroke: blue;");
         else if (this.cor == "Vermelho") l.setStyle("-fx-stroke: red;");
         else l.setStyle("-fx-stroke: black;");
-        if (formato == "Descontínua") 
+        if (this.formato == "Descontínua") 
               l.getStrokeDashArray().addAll(5.0, 10.0, 5.0, 10.0);
       
+        this.linha = l;
         return l;
     }
 
+    public String arestaCor() {
+        if (this.cor == "Azul") return "blue";
+        else if (this.cor == "Vermelho") return "red";
+        return "black";
+    }
+
+    public boolean arestaDescontinua() {
+        if (this.formato == "Descontínua") return true;
+        return false;
+    }
+
+    public Line arestaLinha() {
+        return this.linha;
+    }
+
     public Vertice arestaOrigem() {
-        return origem;
+        return this.origem;
     }
 
     public Vertice arestaDestino() {
-        return destino;
+        return this.destino;
     }
 }
