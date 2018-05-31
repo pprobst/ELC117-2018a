@@ -170,8 +170,8 @@ public class Tela extends Application {
                         origem.vertConecta(destino, aresta);
                         destino.vertConecta(origem, aresta);
                         origem.vertShape().setEffect(null);
-                        //origem.vertShape().toFront();
-                        //destino.vertShape().toFront();
+                        origem.vertShape().toFront();
+                        destino.vertShape().toFront();
                     } else cont = 2;
                 }
             });
@@ -224,7 +224,7 @@ public class Tela extends Application {
                 escreve.println("<line x1='" + x1 + "' y1='" + y1 + "' x2='" + x2 + 
                                 "' y2='" + y2 + "' style='stroke:" + cor + ";stroke-width:2");
                 if (a.arestaDescontinua())
-                    escreve.print(";stroke-dasharray:5px,10px,5px,10px;");
+                    escreve.print(";stroke-dasharray:4px,3px,3px,4px;");
                 escreve.print("'/>");
             }
 
