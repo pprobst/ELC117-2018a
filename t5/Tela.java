@@ -105,12 +105,12 @@ public class Tela extends Application {
         btnVertice.setOnMouseClicked(e -> {
             estado = true;
             cont = 1;
-            fazVertice(pane, cbCor, cbFormatoVert);
+            fazVertice(cbCor, cbFormatoVert);
         });
 
         btnAresta.setOnMouseClicked(e -> {
             estado = false;
-            fazAresta(pane, cbCor, cbFormatoArest);
+            fazAresta(cbCor, cbFormatoArest);
         });
 
         btnSair.setOnMouseClicked(e -> {
@@ -138,7 +138,7 @@ public class Tela extends Application {
     }
 
     // Desenha aresta 
-    public void fazAresta(Pane pane, ChoiceBox cbCor, ChoiceBox cbFormatoArest) {
+    public void fazAresta(ChoiceBox cbCor, ChoiceBox cbFormatoArest) {
         for (Vertice v : vertices) {
             v.vertShape().setOnMouseClicked(e1 -> {
                 DropShadow sombra = new DropShadow();
@@ -168,7 +168,7 @@ public class Tela extends Application {
     }
 
     // Desenha vértice
-    public void fazVertice(Pane pane, ChoiceBox cbCor, ChoiceBox cbFormatoVert) {
+    public void fazVertice(ChoiceBox cbCor, ChoiceBox cbFormatoVert) {
         if (estado) {
             pane.setOnMouseClicked(e0 -> {
                 formatoVertAtual= cbFormatoVert.getValue().toString();
@@ -176,11 +176,23 @@ public class Tela extends Application {
                 if (estado) {
                     Vertice vertice = new Vertice(e0.getX(), e0.getY(), corAtual, 
                             formatoVertAtual);
-                    vertices.add(vertice);
-                    pane.getChildren().add(vertice.criaVert());
+                    Shape desenho = vertice.criaVert();
+                    if (!conflitoVert(desenho) && !(e0.getTarget() instanceof Shape)) {
+                        vertices.add(vertice);
+                        pane.getChildren().add(desenho);
+                    }
                 }
             });
         }
+    }
+
+    // Verifica se há conflito na posição clicada
+    public boolean conflitoVert(Shape vertAtual) {
+        for (Vertice v : vertices) {
+            Shape intersect = Shape.intersect(v.vertShape(), vertAtual);
+            if (intersect.getBoundsInLocal().getWidth() != -1) return true;
+        }
+        return false;
     }
 
     // Lança o programa
