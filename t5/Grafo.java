@@ -36,8 +36,12 @@ public class Grafo {
             for (int j = i+1; j < listaAresta.size();  j++) {
                 Shape intersect = Shape.intersect(listaAresta.get(i).arestaLinha(), 
                                                   listaAresta.get(j).arestaLinha());
-                if (intersect.getBoundsInLocal().getWidth() != -1) 
-                    cont++;
+                if (intersect.getBoundsInLocal().getWidth() != -1) { 
+                    if (!listaAresta.get(i).arestaDescontinua() && 
+                        !listaAresta.get(j).arestaDescontinua()) {
+                        cont++;
+                    }
+                }
             }
         }
         return cont;
