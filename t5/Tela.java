@@ -14,7 +14,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -242,6 +241,7 @@ public class Tela extends Application {
                                     ";stroke-width:2" + ";stroke:black" + "'/>");
                 }
             }
+
             // Escreve informações sobre o grafo no SVG
             int numVert = grafo.numVertices();
             int numArest = grafo.numArestas();

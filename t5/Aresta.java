@@ -1,11 +1,9 @@
 package t5;
 
-import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class Aresta extends Pane {
+public class Aresta {
     private Vertice origem;
     private Vertice destino;
     private String formato;

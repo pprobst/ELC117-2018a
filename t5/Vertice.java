@@ -1,11 +1,10 @@
 package t5;
 
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import java.util.ArrayList;
 
-public class Vertice extends Pane {
+public class Vertice {
     private double raio = 25;
     private double tamQuad = 25*2;
     private double x;
