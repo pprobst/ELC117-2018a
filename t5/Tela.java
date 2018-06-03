@@ -68,9 +68,9 @@ public class Tela extends Application {
         btnSair.setTooltip(new Tooltip("Não aguento mais este programa ruim!"));
 
         // ChoiceBoxes
-        ChoiceBox cbCor = new ChoiceBox();
-        ChoiceBox cbFormatoVert = new ChoiceBox();
-        ChoiceBox cbFormatoArest = new ChoiceBox();
+        ChoiceBox<String> cbCor = new ChoiceBox<String>();
+        ChoiceBox<String> cbFormatoVert = new ChoiceBox<String>();
+        ChoiceBox<String> cbFormatoArest = new ChoiceBox<String>();
         cbCor.getItems().addAll("Preto", "Azul", "Vermelho");
         cbCor.setTooltip(new Tooltip("Cor"));
         cbCor.setValue("Preto");
@@ -101,8 +101,8 @@ public class Tela extends Application {
     // Define a função de cada botão/choicebox
     public void clicaMenu(Stage stage, Button btnVertice, Button btnAresta, 
                           Button btnSair, Button btnSVG, Button btnNovoGrafo, 
-                          Button btnInfo, ChoiceBox cbCor, ChoiceBox cbFormatoVert, 
-                          ChoiceBox cbFormatoArest) {
+                          Button btnInfo, ChoiceBox<String> cbCor, ChoiceBox<String> cbFormatoVert, 
+                          ChoiceBox<String> cbFormatoArest) {
 
         btnVertice.setOnMouseClicked(e -> {
             estado = true;
@@ -146,7 +146,7 @@ public class Tela extends Application {
     }
 
     // Desenha aresta 
-    public void fazAresta(ChoiceBox cbCor, ChoiceBox cbFormatoArest) {
+    public void fazAresta(ChoiceBox<String> cbCor, ChoiceBox<String> cbFormatoArest) {
         for (Vertice v : vertices) {
             v.vertShape().setOnMouseClicked(e1 -> {
                 DropShadow sombra = new DropShadow();
@@ -178,7 +178,7 @@ public class Tela extends Application {
     }
 
     // Desenha vértice
-    public void fazVertice(ChoiceBox cbCor, ChoiceBox cbFormatoVert) {
+    public void fazVertice(ChoiceBox<String> cbCor, ChoiceBox<String> cbFormatoVert) {
         pane.setOnMouseClicked(e0 -> {
             formatoVertAtual= cbFormatoVert.getValue().toString();
             corAtual = cbCor.getValue().toString();

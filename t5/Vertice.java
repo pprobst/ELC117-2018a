@@ -93,7 +93,7 @@ public class Vertice {
         return this.arestasConectadas.size();
     }
 
-    public ArrayList vertArestasConectadas() {
+    public ArrayList<Aresta> vertArestasConectadas() {
         return this.arestasConectadas;
     }
 }
