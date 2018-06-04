@@ -2,7 +2,8 @@
 ##### Para gerar o .jar e executar o programa, digite os seguintes comandos no diretório `t5`:
 
 ```bash
-javapackager -createjar -srcdir bin -outfile editor.jar -appclass t5.Tela
+javac -d classes src/*.java
+javapackager -createjar -srcdir classes -outfile editor.jar -appclass t5.Tela
 java -jar editor.jar
 ```
 
