@@ -1,9 +1,9 @@
 # Editor de Grafos em JavaFX
-##### Para executar o programa, digite os seguintes comandos no diretório onde está `t5`:
+##### Para gerar o .jar e executar o programa, digite os seguintes comandos no diretório `t5`:
 
 ```bash
-javac t5/*.java
-java -cp . t5.Tela
+javapackager -createjar -srcdir bin -outfile editor.jar -appclass t5.Tela
+java -jar editor.jar
 ```
 
 Observação: arestas descontínuas (pontilhadas) não são contadas como
