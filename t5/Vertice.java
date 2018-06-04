@@ -74,7 +74,7 @@ public class Vertice {
         if (this.formato == "Círculo") {
             return this.raio;
         } else {
-            return this.tamQuad;
+            return this.tamQuad/2;
         }
     }
 

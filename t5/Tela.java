@@ -18,6 +18,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.geometry.Insets;
+import javafx.geometry.Bounds;
 import java.util.ArrayList;
 import javafx.scene.control.Tooltip;
 import java.io.File;
@@ -185,12 +186,23 @@ public class Tela extends Application {
             if (estado) {
                 Vertice vertice = new Vertice(e0.getX(), e0.getY(), corAtual, formatoVertAtual);
                 Shape desenho = vertice.criaVert();
-                if (!conflitoVert(desenho) && !(e0.getTarget() instanceof Shape)) {
+                if (!conflitoVert(desenho) && !(e0.getTarget() instanceof Shape) &&
+                    dentroDoPane(vertice, e0)) {
                     vertices.add(vertice);
                     pane.getChildren().add(desenho);
                 }
             }
         });
+    }
+
+    // Verifica se o vértice a ser inserido não ultrapassa o pane
+    public boolean dentroDoPane(Vertice vertice, MouseEvent e) {
+        Double raio = vertice.vertTam();
+        Bounds borda = pane.getBoundsInParent();
+        if ((e.getX() > borda.getMinX() + raio/2) && (e.getX() < borda.getMaxX() - raio*2) &&
+             (e.getY() > borda.getMinY()/2) && (e.getY() < borda.getMaxY() - raio*3.5)) {
+            return true;
+        } return false;
     }
 
     // Verifica se há conflito no momento de inserir um novo vértice
@@ -237,7 +249,7 @@ public class Tela extends Application {
                 }
                 else {
                     escreve.println("<rect x='" + v.vertTamCentroX() + "' y='" + v.vertTamCentroY() + 
-                                    "' width='" + tam + "' height='" + tam + "' style='fill:" + cor + 
+                                    "' width='" + tam*2 + "' height='" + tam*2 + "' style='fill:" + cor + 
                                     ";stroke-width:2" + ";stroke:black" + "'/>");
                 }
             }
