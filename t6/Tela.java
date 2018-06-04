@@ -53,6 +53,8 @@ public class Tela extends Application {
         // Botões
         Button btnNovoJogo = new Button("Novo Jogo");
         btnNovoJogo.setTooltip(new Tooltip("Faz um novo grafo"));
+        Button btnVerifica = new Button("Verificar");
+        btnVerifica.setTooltip(new Tooltip("Verifica se a solução está correta"));
         Button btnSair = new Button("Sair");
         btnSair.setTooltip(new Tooltip("Não aguento mais este programa ruim!"));
 
@@ -63,10 +65,10 @@ public class Tela extends Application {
         cbDificuldade.setValue("Fácil");
 
         // Funções dos botões/choicebox do menu ao clicá-los
-        clicaMenu(stage, btnNovoJogo, btnSair, cbDificuldade);
+        clicaMenu(stage, btnNovoJogo, btnVerifica, btnSair, cbDificuldade);
 
         // Adiciona botões/choicebox no menu
-        menu.getChildren().addAll(btnNovoJogo, cbDificuldade, btnSair);
+        menu.getChildren().addAll(btnNovoJogo, cbDificuldade, btnVerifica, btnSair);
         borderPane.setTop(menu);
         borderPane.setCenter(pane);
 
@@ -77,19 +79,34 @@ public class Tela extends Application {
     }
 
     // Define a função de cada botão/choicebox
-    public void clicaMenu(Stage stage, Button btnNovoJogo, Button btnSair, 
-                          ChoiceBox<String> cbDificuldade) {
+    public void clicaMenu(Stage stage, Button btnNovoJogo, Button btnVerifica, 
+                          Button btnSair, ChoiceBox<String> cbDificuldade) {
 
         btnNovoJogo.setOnMouseClicked(e -> {
-            pane.getChildren().clear();
-            vertices.clear();
-            arestas.clear();
-            if (grafo != null) grafo.resetaGrafo();
+            limpaTudo();
+            // lógica de novo grafo
+        });
+
+        btnVerifica.setOnMouseClicked(e -> {
+            grafo = new Grafo(vertices, arestas);
+            if (grafo.arestasSobrepostas() == 0) {
+                // lógica de sucesso
+                limpaTudo();
+
+            }
         });
 
         btnSair.setOnMouseClicked(e -> {
             stage.close();
         });
+    }
+
+    // Reseta o grafo e limpa a tela
+    public void limpaTudo() {
+        if (grafo != null) grafo.resetaGrafo();
+        vertices.clear();
+        arestas.clear();
+        pane.getChildren().clear();
     }
 
     // Desenha aresta 
