@@ -5,12 +5,9 @@ import javafx.scene.shape.*;
 import java.util.ArrayList;
 
 public class Vertice {
-    private double raio = 25;
-    private double tamQuad = 25*2;
+    private double raio = 15;
     private double x;
     private double y;
-    private String cor;
-    private String formato;
     private Shape shape;
     private Vertice destino;
     private ArrayList<Aresta> arestasConectadas;
@@ -41,6 +38,14 @@ public class Vertice {
 
     public double vertY() {
         return this.y;
+    }
+
+    public void setVertX(double x) {
+        this.x = x;
+    }
+
+    public void setVertY(double y) {
+        this.y = y;
     }
 
     public double vertTam() {

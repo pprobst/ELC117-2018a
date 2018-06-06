@@ -23,6 +23,16 @@ public class Aresta {
         return l;
     }
 
+    public void atualizaAresta(Vertice v) {
+        if (v == this.origem) {
+            this.linha.setStartX(v.vertX());
+            this.linha.setStartY(v.vertY());
+        } else {
+            this.linha.setEndX(v.vertX());
+            this.linha.setEndY(v.vertY());
+        }
+    }
+
     public Line arestaLinha() {
         return this.linha;
     }

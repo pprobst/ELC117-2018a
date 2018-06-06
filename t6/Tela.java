@@ -18,11 +18,12 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.geometry.Insets;
-import java.util.ArrayList;
+import java.util.*;
 import javafx.scene.control.Tooltip;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Random;
 
 public class Tela extends Application {
     private Grafo grafo;
@@ -30,8 +31,11 @@ public class Tela extends Application {
     private ArrayList<Aresta> arestas = new ArrayList<Aresta>();
     private Vertice origem;
     private Vertice destino;
+    private Vertice vertAtual;
     private boolean estado;
     private int cont = 1;
+    private double orgSceneX = 0;
+    private double orgSceneY = 0;
     private Pane pane = new Pane();
     private BorderPane borderPane = new BorderPane();
 
@@ -72,6 +76,9 @@ public class Tela extends Application {
         borderPane.setTop(menu);
         borderPane.setCenter(pane);
 
+        // Controla o arraste dos vértices
+        arrastaVertice();
+
         // Faz a cena
         Scene scene = new Scene(borderPane, 800, 600);
         stage.setScene(scene);
@@ -84,6 +91,8 @@ public class Tela extends Application {
 
         btnNovoJogo.setOnMouseClicked(e -> {
             limpaTudo();
+            int numArestas = 10;
+            geraGrafo(numArestas);
             // lógica de novo grafo
         });
 
@@ -101,6 +110,53 @@ public class Tela extends Application {
         });
     }
 
+    /*
+    public void geraLinhas(int n) {
+        ArrayList<Aresta> linhas = new ArrayList<Aresta>();
+        int numVertices =  n(n-1)/2;
+        int numArestas =  n(n-2);
+
+        while (linhas.size() < n) {
+            Vertice v1 = new Vertice(200);
+            Vertice origem = new Vertice(200+(i*15+20), 150+(i*15+20));
+            Vertice destino = new Vertice(200+(i*15+20), 300+(i*15)); 
+            vertices.add(origem);
+            vertices.add(destino);
+
+        }
+    }
+    */
+
+    // Gera o grafo
+    public void geraGrafo(int numArestas) {
+        try {
+            int minV = (int) Math.ceil((1 + Math.sqrt(1 + 8 * numArestas)) / 2);
+            int maxV = numArestas + 1;
+
+            Random random = new Random();
+            int v = Math.abs(random.nextInt(maxV - minV) + minV);
+            System.out.println("O grafo aleatório tem " + v + " vértices.");
+
+            int i = 0;
+            while (i <= v/2) {
+                Vertice origem = new Vertice(200+(i*35+20), 150+(i*15+20));
+                Vertice destino = new Vertice(200+(i*35+20), 300+(i*15)); 
+                Aresta novaAresta = new Aresta(origem, destino);
+                origem.vertConecta(destino, novaAresta);
+                destino.vertConecta(origem, novaAresta);
+                vertices.add(origem);
+                vertices.add(destino);
+                arestas.add(novaAresta);
+                pane.getChildren().addAll(origem.criaVert(), destino.criaVert(), 
+                                          novaAresta.criaAresta());
+                i++;
+            }
+        } 
+        catch (Exception E) {
+            System.out.println("Algo deu errado...");
+        }
+    }  
+
     // Reseta o grafo e limpa a tela
     public void limpaTudo() {
         if (grafo != null) grafo.resetaGrafo();
@@ -110,13 +166,14 @@ public class Tela extends Application {
     }
 
     // Desenha aresta 
+    /*
     public void fazAresta(ChoiceBox<String> cbDificuldade) {
         for (Vertice v : vertices) {
             v.vertShape().setOnMouseClicked(e1 -> {
                 DropShadow sombra = new DropShadow();
                 sombra.setOffsetY(4.0);
                 if (cont == 1) {
-                    origem = v;
+          i          origem = v;
                     origem.vertShape().setEffect(sombra);
                     origem.vertConecta(origem, null);
                     cont = 2;
@@ -138,8 +195,49 @@ public class Tela extends Application {
             });
         }
     }
+    */
+
+    // Arrasta um vértice no plano
+    public void arrastaVertice() {
+        pane.setOnMousePressed(e0 -> {
+            for (Vertice v : vertices) {
+                System.out.println(v);
+                v.vertShape().setOnMousePressed(e1 -> {
+                    vertAtual = v;
+                    System.out.println("vertAtual: " + v);
+                    orgSceneX = e1.getSceneX();
+                    orgSceneY = e1.getSceneY();
+                });
+            }
+        //});
+
+        //pane.setOnMouseDragged(e2 -> {
+            if (vertAtual != null) {
+                vertAtual.vertShape().setOnMouseDragged(e3 -> {
+                    double offsetX = e3.getSceneX() - orgSceneX;
+                    double offsetY = e3.getSceneY() - orgSceneY;
+                    vertAtual.setVertX(vertAtual.vertX() + offsetX);
+                    vertAtual.setVertY(vertAtual.vertY() + offsetY);
+                    Circle c = (Circle) vertAtual.vertShape();
+                    c.setCenterX(c.getCenterX() + offsetX);
+                    c.setCenterY(c.getCenterY() + offsetY);
+                    orgSceneX = e3.getSceneX();
+                    orgSceneY = e3.getSceneY();
+                    reconectaArestas();
+                });
+            }
+        });
+    }
+
+    public void reconectaArestas() {
+        for (Aresta a : vertAtual.vertArestasConectadas()) {
+            System.out.println("aresta: " + a);
+            a.atualizaAresta(vertAtual); 
+        }
+    }
 
     // Desenha vértice
+    /*
     public void fazVertice(ChoiceBox<String> cbDificuldade) {
         pane.setOnMouseClicked(e0 -> {
             if (estado) {
@@ -152,6 +250,7 @@ public class Tela extends Application {
             }
         });
     }
+    */
 
     // Verifica se há conflito no momento de inserir um novo vértice
     public boolean conflitoVert(Shape vertAtual) {
