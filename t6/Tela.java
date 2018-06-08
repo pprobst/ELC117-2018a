@@ -115,7 +115,7 @@ public class Tela extends Application {
         double chanceAresta = 0.8 * dificuldade;
         int maxPos = 500;
         int minPos = 50;
-        int numVerticesAprox = 10 * (int) dificuldade;
+        int numVerticesAprox = 7 * (int) dificuldade;
         int distCircs = 25;
 
         // Cria os vértices
@@ -149,6 +149,8 @@ public class Tela extends Application {
                         Aresta a = new Aresta(v1, v2);
                         v1.vertConecta(v2, a);
                         v2.vertConecta(v1, a);
+                        v1.vertShape().toFront();
+                        v2.vertShape().toFront();
                         pane.getChildren().add(a.criaAresta());
                     }
                 }
@@ -198,9 +200,9 @@ public class Tela extends Application {
     public void arrastaVertice() {
         pane.setOnMousePressed(e0 -> {
             for (Vertice v : vertices) {
+                v.vertShape().toFront();
                 v.vertShape().setOnMousePressed(e1 -> {
                     vertAtual = v;
-                    System.out.println("vertAtual: " + v);
                     orgSceneX = e1.getSceneX();
                     orgSceneY = e1.getSceneY();
                 });
@@ -221,6 +223,10 @@ public class Tela extends Application {
                     orgSceneY = e3.getSceneY();
                     reconectaArestas();
                 });
+                vertAtual.vertShape().setOnMouseReleased(e4 -> {
+                    arestasCorDefault();
+                    vertAtual.setVertCorDefault();
+                });
             }
         });
     }
@@ -229,6 +235,14 @@ public class Tela extends Application {
     public void reconectaArestas() {
         for (Aresta a : vertAtual.vertArestasConectadas()) {
             a.atualizaAresta(vertAtual); 
+            a.arestaCor(Color.RED);
+            vertAtual.setVertCor(Color.BLUE);
+        }
+    }
+
+    public void arestasCorDefault() {
+        for (Aresta a : vertAtual.vertArestasConectadas()) {
+            a.arestaCorDefault();
         }
     }
 

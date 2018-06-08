@@ -1,5 +1,6 @@
 package t6;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class Aresta {
@@ -41,5 +42,13 @@ public class Aresta {
 
     public Vertice arestaDestino() {
         return this.destino;
+    }
+
+    public void arestaCor(Color cor) {
+        this.linha.setStroke(cor);
+    }
+
+    public void arestaCorDefault() {
+        this.linha.setStroke(Color.BLACK);
     }
 }

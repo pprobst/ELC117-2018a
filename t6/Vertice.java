@@ -22,7 +22,6 @@ public class Vertice {
         Shape f;
 
         f = new Circle(this.x, this.y, raio);
-        f.setFill(Color.BLACK);
         this.shape = f;
 
         return f;
@@ -46,6 +45,14 @@ public class Vertice {
 
     public void setVertY(double y) {
         this.y = y;
+    }
+
+    public void setVertCor(Color cor) {
+        this.shape.setFill(cor);
+    }
+
+    public void setVertCorDefault() {
+        this.shape.setFill(Color.BLACK);
     }
 
     public double vertRaio() {
