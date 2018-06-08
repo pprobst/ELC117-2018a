@@ -88,20 +88,22 @@ public class Tela extends Application {
         btnNovoJogo.setOnMouseClicked(e -> {
             limpaTudo();
             String dificuldade = cbDificuldade.getValue().toString(); 
-            double dificuldadeNum;
+            int dificuldadeNum;
             if (dificuldade == "Fácil") dificuldadeNum = 1;
             else if (dificuldade == "Médio") dificuldadeNum = 2;
             else dificuldadeNum = 3;
-            geraGrafo(dificuldadeNum);
-            grafo = new Grafo(vertices, arestas);
+            geraGrafoPlanar(dificuldadeNum);
         });
 
         btnVerifica.setOnMouseClicked(e -> {
             grafo = new Grafo(vertices, arestas);
-            if (grafo.arestasSobrepostas() == 0) {
-                // lógica de sucesso
-                limpaTudo();
-            }
+            Alert aviso = new Alert(AlertType.INFORMATION);
+            if (grafo.arestasSobrepostas() == 0) 
+                aviso.setHeaderText("Woah~, você conseguiu!");
+            else 
+                aviso.setHeaderText("Ara, não foi desta vez.");
+            aviso.setContentText("Arestas sobrepostas: " + grafo.arestasSobrepostas());
+            aviso.showAndWait();
         });
 
         btnSair.setOnMouseClicked(e -> {
@@ -110,12 +112,12 @@ public class Tela extends Application {
     }
 
     // Gera o grafo
-    public void geraGrafo(double dificuldade) {
+    public void geraGrafoPlanar(int dificuldade) {
         Random random = new Random();
-        double chanceAresta = 0.8 * dificuldade;
+        double chanceAresta = 0.8;
         int maxPos = 500;
-        int minPos = 50;
-        int numVerticesAprox = 7 * (int) dificuldade;
+        int minPos = 20;
+        int numVerticesAprox = 7 * dificuldade;
         int distCircs = 25;
 
         // Cria os vértices
@@ -147,6 +149,7 @@ public class Tela extends Application {
                         Vertice v1 = vertices.get(i);
                         Vertice v2 = vertices.get(j);
                         Aresta a = new Aresta(v1, v2);
+                        arestas.add(a);
                         v1.vertConecta(v2, a);
                         v2.vertConecta(v1, a);
                         v1.vertShape().toFront();
@@ -231,7 +234,7 @@ public class Tela extends Application {
         });
     }
 
-    // Faz as arestas acompanharem o arraste dos vértices
+    // Faz as arestas acompanharem o arraste dos vértices, mudando a cor
     public void reconectaArestas() {
         for (Aresta a : vertAtual.vertArestasConectadas()) {
             a.atualizaAresta(vertAtual); 
@@ -240,6 +243,7 @@ public class Tela extends Application {
         }
     }
 
+    // Volta para a cor default das arestas
     public void arestasCorDefault() {
         for (Aresta a : vertAtual.vertArestasConectadas()) {
             a.arestaCorDefault();
