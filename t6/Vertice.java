@@ -5,7 +5,7 @@ import javafx.scene.shape.*;
 import java.util.ArrayList;
 
 public class Vertice {
-    private double raio = 15;
+    private double raio = 10;
     private double x;
     private double y;
     private Shape shape;
@@ -48,7 +48,7 @@ public class Vertice {
         this.y = y;
     }
 
-    public double vertTam() {
+    public double vertRaio() {
         return this.raio;
     }
 

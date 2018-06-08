@@ -17,8 +17,6 @@ public class Aresta {
         Line l = new Line(this.origem.vertX(), this.origem.vertY(), 
                           this.destino.vertX(), this.destino.vertY());
 
-        //l.setStyle("-fx-stroke: black;");
-      
         this.linha = l;
         return l;
     }
