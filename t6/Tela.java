@@ -13,12 +13,13 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import java.util.*;
+import javafx.scene.image.*;
 import javafx.scene.control.Tooltip;
 import java.io.File;
 import java.io.IOException;
@@ -98,11 +99,20 @@ public class Tela extends Application {
         btnVerifica.setOnMouseClicked(e -> {
             grafo = new Grafo(vertices, arestas);
             Alert aviso = new Alert(AlertType.INFORMATION);
-            if (grafo.arestasSobrepostas() == 0) 
-                aviso.setHeaderText("Woah~, você conseguiu!");
-            else 
-                aviso.setHeaderText("Ara, não foi desta vez.");
-            aviso.setContentText("Arestas sobrepostas: " + grafo.arestasSobrepostas());
+            if (grafo.numVertices() == 0) aviso.setHeaderText("Crie um novo grafo antes!");
+            else {
+                Image kaosu;
+                if (grafo.arestasSobrepostas() == 0) {
+                    aviso.setHeaderText("Woah~, você conseguiu!");
+                    kaosu = new Image(getClass().getResource("kaosu_feliz.png").toExternalForm());
+                } else {
+                    aviso.setHeaderText("Ara, não foi desta vez.");
+                    aviso.setContentText("Arestas sobrepostas: " + grafo.arestasSobrepostas());
+                    kaosu = new Image(getClass().getResource("kaosu_triste.png").toExternalForm());
+                }
+                ImageView kaosuView = new ImageView(kaosu);
+                aviso.setGraphic(kaosuView);
+            }
             aviso.showAndWait();
         });
 
@@ -115,16 +125,23 @@ public class Tela extends Application {
     public void geraGrafoPlanar(int dificuldade) {
         Random random = new Random();
         double chanceAresta = 0.8;
-        int maxPos = 500;
-        int minPos = 20;
-        int numVerticesAprox = 7 * dificuldade;
-        int distCircs = 25;
+        Vertice teste = new Vertice(0, 0);
+
+        // Variáveis que decidem uma boa área para dispor o grafo
+        // (mais ou menos centrada, coim uma breve distância das bordas)
+        double distCircs = teste.vertRaio()*2;
+        Bounds borda = pane.getBoundsInParent();
+        double maxPosX = borda.getMaxX() - distCircs*4;
+        double minPosX = borda.getMinX() + distCircs/2;
+        double maxPosY = borda.getMaxY() - distCircs*4.5;
+        double minPosY = borda.getMinY()/2;
+        double numVerticesAprox = 7 * dificuldade;
 
         // Cria os vértices
         for (int i = 0; i < numVerticesAprox; i++) {
             Vertice novoVert = 
-                new Vertice(random.nextInt(maxPos - minPos + distCircs) + minPos,
-                            random.nextInt(maxPos - minPos + distCircs) + minPos);
+                new Vertice(random.nextInt((int) (maxPosX - minPosX + distCircs)) + minPosX,
+                            random.nextInt((int) (maxPosY - minPosY + distCircs)) + minPosY);
 
             // Se não ocorreu conflito de posição entre círculos, ok
             if (!conflitoVert(novoVert)) {
