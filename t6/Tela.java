@@ -31,10 +31,13 @@ public class Tela extends Application {
     private ArrayList<Vertice> vertices = new ArrayList<Vertice>();
     private ArrayList<Aresta> arestas = new ArrayList<Aresta>();
     private Vertice vertAtual;
+    private double raioVert = Vertice.vertRaio();
     private double orgSceneX = 0;
     private double orgSceneY = 0;
+    private int dificuldadeNum;
     private Pane pane = new Pane();
     private BorderPane borderPane = new BorderPane();
+    private Bounds borda;
 
     @Override
     public void start(Stage stage) {
@@ -89,7 +92,6 @@ public class Tela extends Application {
         btnNovoJogo.setOnMouseClicked(e -> {
             limpaTudo();
             String dificuldade = cbDificuldade.getValue().toString(); 
-            int dificuldadeNum;
             if (dificuldade == "Fácil") dificuldadeNum = 1;
             else if (dificuldade == "Médio") dificuldadeNum = 2;
             else dificuldadeNum = 3;
@@ -99,12 +101,14 @@ public class Tela extends Application {
         btnVerifica.setOnMouseClicked(e -> {
             grafo = new Grafo(vertices, arestas);
             Alert aviso = new Alert(AlertType.INFORMATION);
+            boolean vitoria = false;
             if (grafo.numVertices() == 0) aviso.setHeaderText("Crie um novo grafo antes!");
             else {
                 Image kaosu;
                 if (grafo.arestasSobrepostas() == 0) {
                     aviso.setHeaderText("Woah~, você conseguiu!");
                     kaosu = new Image(getClass().getResource("kaosu_feliz.png").toExternalForm());
+                    vitoria = true;
                 } else {
                     aviso.setHeaderText("Ara, não foi desta vez.");
                     aviso.setContentText("Arestas sobrepostas: " + grafo.arestasSobrepostas());
@@ -114,6 +118,10 @@ public class Tela extends Application {
                 aviso.setGraphic(kaosuView);
             }
             aviso.showAndWait();
+            if (vitoria) {
+                limpaTudo();
+                geraGrafoPlanar(dificuldadeNum);
+            }
         });
 
         btnSair.setOnMouseClicked(e -> {
@@ -125,12 +133,11 @@ public class Tela extends Application {
     public void geraGrafoPlanar(int dificuldade) {
         Random random = new Random();
         double chanceAresta = 0.8;
-        Vertice teste = new Vertice(0, 0);
 
         // Variáveis que decidem uma boa área para dispor o grafo
-        // (mais ou menos centrada, coim uma breve distância das bordas)
-        double distCircs = teste.vertRaio()*2;
-        Bounds borda = pane.getBoundsInParent();
+        // (mais ou menos centrado, com uma breve distância das bordas)
+        double distCircs = raioVert*2;
+        borda = pane.getBoundsInParent();
         double maxPosX = borda.getMaxX() - distCircs*4;
         double minPosX = borda.getMinX() + distCircs/2;
         double maxPosY = borda.getMaxY() - distCircs*4.5;
@@ -194,7 +201,6 @@ public class Tela extends Application {
         return false;
     }
 
-
     // Remove os vértices solitários (RIP)
     public void removeSolitarios() {
         if (vertices.size() > 0) {
@@ -221,34 +227,54 @@ public class Tela extends Application {
         pane.setOnMousePressed(e0 -> {
             for (Vertice v : vertices) {
                 v.vertShape().toFront();
-                v.vertShape().setOnMousePressed(e1 -> {
+                if (v.vertShape() == e0.getTarget()) {
                     vertAtual = v;
-                    orgSceneX = e1.getSceneX();
-                    orgSceneY = e1.getSceneY();
-                });
+                    orgSceneX = e0.getSceneX();
+                    orgSceneY = e0.getSceneY();
+                }
             }
-        //});
+        });
 
-        //pane.setOnMouseDragged(e2 -> {
+        pane.setOnMouseDragged(e1 -> {
             if (vertAtual != null) {
-                vertAtual.vertShape().setOnMouseDragged(e3 -> {
-                    double offsetX = e3.getSceneX() - orgSceneX;
-                    double offsetY = e3.getSceneY() - orgSceneY;
-                    vertAtual.setVertX(vertAtual.vertX() + offsetX);
-                    vertAtual.setVertY(vertAtual.vertY() + offsetY);
+                vertAtual.vertShape().setOnMouseDragged(e2 -> {
+                    double offsetX = e2.getSceneX() - orgSceneX;
+                    double offsetY = e2.getSceneY() - orgSceneY;
                     Circle c = (Circle) vertAtual.vertShape();
-                    c.setCenterX(c.getCenterX() + offsetX);
-                    c.setCenterY(c.getCenterY() + offsetY);
-                    orgSceneX = e3.getSceneX();
-                    orgSceneY = e3.getSceneY();
+                    double x = c.getCenterX() + offsetX;
+                    double y = c.getCenterY() + offsetY;
+                    if (dentroDoPaneX(x)) {
+                        vertAtual.setVertX(vertAtual.vertX() + offsetX);
+                        c.setCenterX(c.getCenterX() + offsetX);
+                        orgSceneX = e2.getSceneX();
+                    }
+                    if (dentroDoPaneY(y)) {
+                        vertAtual.setVertY(vertAtual.vertY() + offsetY);
+                        c.setCenterY(c.getCenterY() + offsetY);
+                        orgSceneY = e2.getSceneY();
+                    }
                     reconectaArestas();
                 });
-                vertAtual.vertShape().setOnMouseReleased(e4 -> {
+                vertAtual.vertShape().setOnMouseReleased(e3 -> {
                     arestasCorDefault();
                     vertAtual.setVertCorDefault();
                 });
             }
         });
+    }
+
+    // Verifica se a posição de arraste está entre os limites da altura (Y)
+    public boolean dentroDoPaneX(double x) {
+        if ((x <= borda.getMaxX() - raioVert*3) && (x >= borda.getMinX() - raioVert))
+            return true;
+        return false;
+    }
+
+    // Verifica se a posição de arraste está entre os limites da largura (X)
+    public boolean dentroDoPaneY(double y) {
+        if ((y <= borda.getMaxY() - raioVert*6) && (y >= borda.getMinY() - raioVert*4))
+            return true;
+        return false;
     }
 
     // Faz as arestas acompanharem o arraste dos vértices, mudando a cor

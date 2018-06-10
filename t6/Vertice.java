@@ -5,7 +5,7 @@ import javafx.scene.shape.*;
 import java.util.ArrayList;
 
 public class Vertice {
-    private double raio = 10;
+    private static double raio = 10;
     private double x;
     private double y;
     private Shape shape;
@@ -55,8 +55,8 @@ public class Vertice {
         this.shape.setFill(Color.BLACK);
     }
 
-    public double vertRaio() {
-        return this.raio;
+    public static double vertRaio() {
+        return raio;
     }
 
     public void vertConecta(Vertice destino, Aresta aresta) {
