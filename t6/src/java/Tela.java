@@ -21,9 +21,6 @@ import javafx.geometry.Insets;
 import java.util.*;
 import javafx.scene.image.*;
 import javafx.scene.control.Tooltip;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Random;
 
 public class Tela extends Application {
