@@ -263,14 +263,14 @@ public class Tela extends Application {
         });
     }
 
-    // Verifica se a posição de arraste está entre os limites da altura (Y)
+    // Verifica se a posição de arraste está entre os limites da largura (X)
     public boolean dentroDoPaneX(double x) {
         if ((x <= borda.getMaxX() - raioVert*3) && (x >= borda.getMinX() - raioVert))
             return true;
         return false;
     }
 
-    // Verifica se a posição de arraste está entre os limites da largura (X)
+    // Verifica se a posição de arraste está entre os limites da altura (Y)
     public boolean dentroDoPaneY(double y) {
         if ((y <= borda.getMaxY() - raioVert*6) && (y >= borda.getMinY() - raioVert*4))
             return true;
