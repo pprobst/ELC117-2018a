@@ -59,7 +59,7 @@ public class Tela extends Application {
         Button btnSair = new Button("Sair");
         btnSair.setTooltip(new Tooltip("Não aguento mais este programa ruim!"));
 
-        // ChoiceBox (selectiona dificuldade)
+        // ChoiceBox (seleciona dificuldade)
         ChoiceBox<String> cbDificuldade = new ChoiceBox<String>();
         cbDificuldade.getItems().addAll("Fácil", "Médio", "Difícil");
         cbDificuldade.setTooltip(new Tooltip("Dificuldade do jogo"));
