@@ -26,7 +26,8 @@ public class Interface extends Application {
         Label label = new Label("Frota de ônibus do Rio de Janeiro");
         
         info.setaURL("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/obterPosicoesDaLinha/100");
-        ObservableList<Onibus> frota = info.criaFrota();
+        info.criaFrota();
+        //ObservableList<Onibus> frota = info.listaFrota();
 
         TableColumn datahCol = new TableColumn("Data/Hora");
         datahCol.setMinWidth(150);
@@ -73,12 +74,14 @@ public class Interface extends Application {
                 new PropertyValueFactory<Onibus, String>("velocidade"));
         velCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        table.setItems(frota);
+        table.setItems(info.listaFrota());
         table.getColumns().addAll(datahCol, ordemCol, linhaCol, latCol, longCol, velCol);
 
         Button btnAtualiza = new Button("Atualizar");
         btnAtualiza.setOnAction(e -> {
             // lógica de atualização
+            table.getItems().clear();
+            info.atualizaFrota();
         });
 
         HBox hbox = new HBox();

@@ -11,8 +11,8 @@ public class Info {
     private String url;
     private ObservableList<Onibus> frota = FXCollections.observableArrayList();
 
-    public ObservableList<Onibus> criaFrota() {
-        //this.frota.clear();
+    public void criaFrota() {
+        this.frota.clear();
         Map json = this.api.muhJSON(this.url);
         List dados = (List)json.get("DATA");
         for (Object dado: dados) {
@@ -28,7 +28,14 @@ public class Info {
                                        longitude, velocidade);
             this.frota.add(onibus);    
         }
+    }
+
+    public ObservableList<Onibus> listaFrota() {
         return this.frota;
+    }
+
+    public void atualizaFrota() {
+        this.criaFrota();
     }
 
     public void setaURL(String url) {
