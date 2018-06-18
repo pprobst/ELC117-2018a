@@ -14,7 +14,7 @@ import javax.script.ScriptException;
 public class API {
     private HttpJSONService http = new HttpJSONService();
     
-    private Map muhJSON(String url) {
+    public Map muhJSON(String url) {
         Map json = null;
         try {
             json = http.sendGet(url);
