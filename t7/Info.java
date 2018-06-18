@@ -45,4 +45,28 @@ public class Info {
     public int tamFrota() {
         return this.frota.size();
     }
+
+    public int onibusParados() {
+        int contPar = 0;
+        for (Onibus onb : this.frota) {
+            if (Double.parseDouble(onb.getVelocidade()) <= 0) contPar++;
+        } 
+        return contPar;
+    }
+
+    public int onibusMovimento() {
+        int contMov = 0;
+        for (Onibus onb : this.frota) {
+            if (Double.parseDouble(onb.getVelocidade()) >= 0) contMov++; 
+        }
+        return contMov;
+    }
+
+    public double onibusParadosPercent() {
+        return (this.onibusParados()*100)/this.tamFrota(); 
+    }
+
+    public double onibusMovimentoPercent() {
+        return (this.onibusMovimento()*100)/this.tamFrota();
+    }
 }

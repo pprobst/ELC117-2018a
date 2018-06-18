@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.HBox;
+import javafx.scene.chart.*;
 
 public class Interface extends Application {
     private TableView<Onibus> table = new TableView<Onibus>();
@@ -24,7 +25,7 @@ public class Interface extends Application {
     @Override
     public void start(Stage stage) {
         Label label = new Label("Frota de ônibus do Rio de Janeiro");
-        
+
         info.setaURL("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/obterPosicoesDaLinha/100");
         info.criaFrota();
         //ObservableList<Onibus> frota = info.listaFrota();
@@ -84,8 +85,10 @@ public class Interface extends Application {
             info.atualizaFrota();
         });
 
+        PieChart grafPizza = fazPizza(); 
+
         HBox hbox = new HBox();
-        hbox.getChildren().addAll(btnAtualiza);
+        hbox.getChildren().addAll(btnAtualiza, grafPizza);
         hbox.setSpacing(5);
         hbox.setPadding(new Insets(15, 10, 15, 10));
 
@@ -98,6 +101,26 @@ public class Interface extends Application {
         stage.show();
     }
 
+    public PieChart fazPizza() {
+        ObservableList<PieChart.Data> pizzaData = 
+            FXCollections.observableArrayList(
+                    new PieChart.Data("Veículos parados", info.onibusParadosPercent()), 
+                    new PieChart.Data("Veículos em movimento", info.onibusMovimentoPercent()));
+
+        PieChart grafPizza = new PieChart(pizzaData);
+        return grafPizza;
+    } 
+
+    public BarChart fazBarra() {
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Linha");       
+        yAxis.setLabel("Quantidade de veículos");
+        
+        // terminar em casa
+        BarChart barra = new BarChart<String, Number>(xAxis,yAxis);
+        return barra;
+    }
 
     public static void main(String[] args) {
         launch(args);
