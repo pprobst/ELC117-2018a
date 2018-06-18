@@ -26,7 +26,7 @@ public class Interface extends Application {
     public void start(Stage stage) {
         Label label = new Label("Frota de ônibus do Rio de Janeiro");
 
-        info.setaURL("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/obterPosicoesDaLinha/100");
+        info.setaURL("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/obterTodasPosicoes");
         info.criaFrota();
         //ObservableList<Onibus> frota = info.listaFrota();
 
@@ -86,16 +86,17 @@ public class Interface extends Application {
         });
 
         PieChart grafPizza = fazPizza(); 
+        BarChart grafBarra = fazBarra();
 
         HBox hbox = new HBox();
-        hbox.getChildren().addAll(btnAtualiza, grafPizza);
+        hbox.getChildren().addAll(grafPizza, grafBarra);
         hbox.setSpacing(5);
         hbox.setPadding(new Insets(15, 10, 15, 10));
 
         VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 10, 10, 10));
-        vbox.getChildren().addAll(label, table, hbox);
+        vbox.getChildren().addAll(label, btnAtualiza, table, hbox);
 
         stage.setScene(new Scene(vbox, 800, 600));
         stage.show();
@@ -114,12 +115,20 @@ public class Interface extends Application {
     public BarChart fazBarra() {
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
+        BarChart<String,Number> grafBarra = new BarChart<String,Number>(xAxis,yAxis);
+        
         xAxis.setLabel("Linha");       
         yAxis.setLabel("Quantidade de veículos");
         
-        // terminar em casa
-        BarChart barra = new BarChart<String, Number>(xAxis,yAxis);
-        return barra;
+        XYChart.Series series = new XYChart.Series();
+
+        for (String linha : info.linhasFrota()) {
+            int quantVeiculos = info.qtdOnibusLinha(linha);
+            series.getData().add(new XYChart.Data(linha, quantVeiculos));
+        }
+
+        grafBarra.getData().addAll(series);
+        return grafBarra;
     }
 
     public static void main(String[] args) {

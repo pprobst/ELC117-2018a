@@ -10,6 +10,7 @@ public class Info {
     private API api = new API();
     private String url;
     private ObservableList<Onibus> frota = FXCollections.observableArrayList();
+    private ArrayList<String> linhas = new ArrayList<String>();
 
     public void criaFrota() {
         this.frota.clear();
@@ -28,6 +29,7 @@ public class Info {
                                        longitude, velocidade);
             this.frota.add(onibus);    
         }
+        this.criaLinhasFrota();
     }
 
     public ObservableList<Onibus> listaFrota() {
@@ -68,5 +70,27 @@ public class Info {
 
     public double onibusMovimentoPercent() {
         return (this.onibusMovimento()*100)/this.tamFrota();
+    }
+
+    public void criaLinhasFrota() {
+        this.linhas.clear();
+        for (Onibus onb : this.frota) {
+            String linhaAtual = onb.getLinha();
+            if (!this.linhas.contains(linhaAtual) && linhaAtual != "") 
+                this.linhas.add(linhaAtual);
+        }
+    }
+
+    public ArrayList<String> linhasFrota() {
+        return this.linhas;
+    }
+
+    public int qtdOnibusLinha(String linha) {
+        int contOnibusLinha = 0;
+        for (Onibus onb : this.frota) {
+           if (linha == onb.getLinha() && Double.parseDouble(onb.getVelocidade()) > 0) 
+               contOnibusLinha++;
+        }
+        return contOnibusLinha;
     }
 }
