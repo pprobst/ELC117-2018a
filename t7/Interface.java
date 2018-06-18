@@ -19,25 +19,27 @@ import javafx.scene.layout.HBox;
 
 public class Interface extends Application {
     private TableView<Onibus> table = new TableView<Onibus>();
-    private final ObservableList<Onibus> frota = 
-        FXCollections.observableArrayList();
+    private Info info = new Info();
 
     @Override
     public void start(Stage stage) {
         Label label = new Label("Frota de ônibus do Rio de Janeiro");
+        
+        info.setaURL("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/obterPosicoesDaLinha/100");
+        ObservableList<Onibus> frota = info.criaFrota();
 
         TableColumn datahCol = new TableColumn("Data/Hora");
-        datahCol.setMinWidth(100);
+        datahCol.setMinWidth(150);
         TableColumn ordemCol = new TableColumn("Ordem");
-        ordemCol.setMinWidth(30);
+        ordemCol.setMinWidth(100);
         TableColumn linhaCol = new TableColumn("Linha");
-        linhaCol.setMinWidth(30);
+        linhaCol.setMinWidth(100);
         TableColumn latCol = new TableColumn("Latitude");
-        latCol.setMinWidth(100);
+        latCol.setMinWidth(110);
         TableColumn longCol = new TableColumn("Longitude");
-        longCol.setMinWidth(100);
+        longCol.setMinWidth(130);
         TableColumn velCol = new TableColumn("Velocidade");
-        velCol.setMinWidth(100);
+        velCol.setMinWidth(120);
 
         // Ajeitar mais tarde...
         // Para evitar warnings
