@@ -5,6 +5,13 @@ import java.util.List;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+
+/*
+ * Classe que representa a frota de ônibus e os diversos métodos para manipulá-la.
+ * Os métodos podem manipular listas com frotas total ou parcial (FilteredList), 
+ * sendo esta última utilizada para a elaboração dos gráficos no View/Controller.
+ */
 
 public class Info {
     private API api = new API();
@@ -48,28 +55,32 @@ public class Info {
         return this.frota.size();
     }
 
-    public int onibusParados() {
+    public int tamFrotaFiltrado(FilteredList<Onibus> onibusFiltrados) {
+        return onibusFiltrados.size();
+    }
+
+    public int onibusParados(FilteredList<Onibus> onibusFiltrados) {
         int contPar = 0;
-        for (Onibus onb : this.frota) {
+        for (Onibus onb : onibusFiltrados) {
             if (Double.parseDouble(onb.getVelocidade()) <= 0) contPar++;
         } 
         return contPar;
     }
 
-    public int onibusMovimento() {
+    public int onibusMovimento(FilteredList<Onibus> onibusFiltrados) {
         int contMov = 0;
-        for (Onibus onb : this.frota) {
+        for (Onibus onb : onibusFiltrados) {
             if (Double.parseDouble(onb.getVelocidade()) >= 0) contMov++; 
         }
         return contMov;
     }
 
-    public double onibusParadosPercent() {
-        return (this.onibusParados()*100)/this.tamFrota(); 
+    public double onibusParadosPercent(FilteredList<Onibus> onibusFiltrados) {
+        return (this.onibusParados(onibusFiltrados)*100)/this.tamFrotaFiltrado(onibusFiltrados); 
     }
 
-    public double onibusMovimentoPercent() {
-        return (this.onibusMovimento()*100)/this.tamFrota();
+    public double onibusMovimentoPercent(FilteredList<Onibus> onibusFiltrados) {
+        return (this.onibusMovimento(onibusFiltrados)*100)/this.tamFrotaFiltrado(onibusFiltrados);
     }
 
     public void criaLinhasFrota() {
@@ -85,10 +96,20 @@ public class Info {
         return this.linhas;
     }
 
-    public int qtdOnibusLinha(String linha) {
+    public ArrayList<String> linhasFrotaFiltrada(FilteredList<Onibus> onibusFiltrados) {
+        ArrayList<String> linhasFiltradas = new ArrayList<String>();
+        for (Onibus onb : onibusFiltrados) {
+            String linhaAtual = onb.getLinha();
+            if (!linhasFiltradas.contains(linhaAtual) && linhaAtual != "") 
+                linhasFiltradas.add(linhaAtual);
+        }
+        return linhasFiltradas;
+    }
+
+    public int qtdOnibusLinha(String linha, FilteredList<Onibus> onibusFiltrados) {
         int contOnibusLinha = 0;
-        for (Onibus onb : this.frota) {
-           if (linha == onb.getLinha() && Double.parseDouble(onb.getVelocidade()) > 0) 
+        for (Onibus onb : onibusFiltrados) {
+           if (onb.getLinha().equals(linha) && Double.parseDouble(onb.getVelocidade()) > 0.0) 
                contOnibusLinha++;
         }
         return contOnibusLinha;
