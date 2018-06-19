@@ -10,13 +10,20 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.HBox;
 import javafx.scene.chart.*;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import java.util.function.Predicate;
 
 public class Interface extends Application {
     private TableView<Onibus> table = new TableView<Onibus>();
@@ -28,7 +35,6 @@ public class Interface extends Application {
 
         info.setaURL("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/obterTodasPosicoes");
         info.criaFrota();
-        //ObservableList<Onibus> frota = info.listaFrota();
 
         TableColumn datahCol = new TableColumn("Data/Hora");
         datahCol.setMinWidth(150);
@@ -78,60 +84,97 @@ public class Interface extends Application {
         table.setItems(info.listaFrota());
         table.getColumns().addAll(datahCol, ordemCol, linhaCol, latCol, longCol, velCol);
 
+        TextField filterField = new TextField();
+        filterField.setPromptText("Linha");
+        TextField filtraVelocidade = new TextField();
+        filtraVelocidade.setPromptText("Velocidade");
+        TextField filtraOrdem = new TextField();
+        filtraOrdem.setPromptText("Ordem");
+
+        filtraTabela(filterField, filtraVelocidade, filtraOrdem);
+
         Button btnAtualiza = new Button("Atualizar");
         btnAtualiza.setOnAction(e -> {
-            // lógica de atualização
-            table.getItems().clear();
             info.atualizaFrota();
         });
+
 
         PieChart grafPizza = fazPizza(); 
         BarChart grafBarra = fazBarra();
 
-        HBox hbox = new HBox();
-        hbox.getChildren().addAll(grafPizza, grafBarra);
-        hbox.setSpacing(5);
-        hbox.setPadding(new Insets(15, 10, 15, 10));
+        HBox hboxFiltros = new HBox();
+        hboxFiltros.getChildren().addAll(filtraOrdem, filterField, filtraVelocidade);
+        hboxFiltros.setSpacing(5);
+
+        HBox hboxGrafs = new HBox();
+        hboxGrafs.getChildren().addAll(grafPizza, grafBarra);
+        hboxGrafs.setSpacing(5);
 
         VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 10, 10, 10));
-        vbox.getChildren().addAll(label, btnAtualiza, table, hbox);
+        vbox.getChildren().addAll(label, btnAtualiza, hboxFiltros, table, hboxGrafs);
 
         stage.setScene(new Scene(vbox, 800, 600));
         stage.show();
     }
 
-    public PieChart fazPizza() {
-        ObservableList<PieChart.Data> pizzaData = 
-            FXCollections.observableArrayList(
-                    new PieChart.Data("Veículos parados", info.onibusParadosPercent()), 
-                    new PieChart.Data("Veículos em movimento", info.onibusMovimentoPercent()));
+    public void filtraTabela(TextField filterField, TextField filtraVelocidade, 
+                             TextField filtraOrdem) {
 
-        PieChart grafPizza = new PieChart(pizzaData);
-        return grafPizza;
-    } 
+        ObjectProperty<Predicate<Onibus>> filtroLinha = new SimpleObjectProperty<>();
+        ObjectProperty<Predicate<Onibus>> filtroVelocidade = new SimpleObjectProperty<>();
+        ObjectProperty<Predicate<Onibus>> filtroOrdem = new SimpleObjectProperty<>();
 
-    public BarChart fazBarra() {
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        BarChart<String,Number> grafBarra = new BarChart<String,Number>(xAxis,yAxis);
-        
-        xAxis.setLabel("Linha");       
-        yAxis.setLabel("Quantidade de veículos");
-        
-        XYChart.Series series = new XYChart.Series();
+        filtroLinha.bind(Bindings.createObjectBinding(() -> 
+                    onb -> onb.getLinha().contains(filterField.getText()), 
+                    filterField.textProperty()));
 
-        for (String linha : info.linhasFrota()) {
-            int quantVeiculos = info.qtdOnibusLinha(linha);
-            series.getData().add(new XYChart.Data(linha, quantVeiculos));
+        filtroVelocidade.bind(Bindings.createObjectBinding(() -> 
+                    onb -> onb.getVelocidade().contains(filtraVelocidade.getText()), 
+                    filtraVelocidade.textProperty()));
+
+        filtroOrdem.bind(Bindings.createObjectBinding(() -> 
+                    onb -> onb.getOrdem().contains(filtraOrdem.getText()), 
+                    filtraOrdem.textProperty()));
+
+        FilteredList<Onibus> filteredData = new FilteredList<>(info.listaFrota(), p -> true);
+        table.setItems(filteredData);
+        filteredData.predicateProperty().bind(Bindings.createObjectBinding(
+                    () -> filtroLinha.get().and(filtroVelocidade.get().and(filtroOrdem.get())), 
+                    filtroLinha, filtroVelocidade, filtroOrdem));
+    }
+
+        public PieChart fazPizza() {
+            ObservableList<PieChart.Data> pizzaData = 
+                FXCollections.observableArrayList(
+                        new PieChart.Data("Veículos parados", info.onibusParadosPercent()), 
+                        new PieChart.Data("Veículos em movimento", info.onibusMovimentoPercent()));
+
+            PieChart grafPizza = new PieChart(pizzaData);
+            return grafPizza;
+        } 
+
+        public BarChart fazBarra() {
+            CategoryAxis xAxis = new CategoryAxis();
+            NumberAxis yAxis = new NumberAxis();
+            BarChart<String,Number> grafBarra = new BarChart<String,Number>(xAxis,yAxis);
+
+            xAxis.setLabel("Linha");       
+            yAxis.setLabel("Quantidade de veículos");
+
+            XYChart.Series series = new XYChart.Series();
+
+            for (String linha : info.linhasFrota()) {
+                int quantVeiculos = info.qtdOnibusLinha(linha);
+                series.getData().add(new XYChart.Data(linha, quantVeiculos));
+            }
+
+            grafBarra.getData().addAll(series);
+            return grafBarra;
         }
 
-        grafBarra.getData().addAll(series);
-        return grafBarra;
+        public static void main(String[] args) {
+            launch(args);
+        }
     }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-}
