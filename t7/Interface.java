@@ -26,16 +26,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import java.util.function.Predicate;
 
 public class Interface extends Application {
-    private TableView<Onibus> table = new TableView<Onibus>();
-    private Frota frota = new Frota();
-    private FilteredList<Onibus> dadosFiltrados;
+    private Control control = new Control();
+    //private FilteredList<Onibus> dadosFiltrados;
 
     @Override
     public void start(Stage stage) {
         Label label = new Label("Frota de ônibus do Rio de Janeiro");
-
-        frota.setaURL("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/obterTodasPosicoes");
-        //frota.criaFrota();
+        TableView<Onibus> table = new TableView<Onibus>();
 
         TableColumn datahCol = new TableColumn("Data/Hora");
         datahCol.setMinWidth(150);
@@ -91,27 +88,15 @@ public class Interface extends Application {
         TextField filtraOrdem = new TextField();
         filtraOrdem.setPromptText("Ordem");
 
-        filtraTabela(filtraLinha, filtraVelocidade, filtraOrdem);
+        control.filtraTabela(table, filtraLinha, filtraVelocidade, filtraOrdem);
 
         HBox hboxGrafs = new HBox();
         hboxGrafs.setSpacing(5);
 
         Button btnAtualizaDados = new Button("Atualizar dados");
-        btnAtualizaDados.setOnAction(e -> {
-            frota.criaFrota();
-            hboxGrafs.getChildren().clear();
-            PieChart grafPizza = fazPizza(dadosFiltrados); 
-            BarChart grafBarra = fazBarra(dadosFiltrados);
-            hboxGrafs.getChildren().addAll(grafPizza, grafBarra);
-        });
-
         Button btnAtualizaGrafs = new Button("Atualizar gráficos");
-        btnAtualizaGrafs.setOnAction(e -> {
-            hboxGrafs.getChildren().clear();
-            PieChart grafPizza = fazPizza(dadosFiltrados); 
-            BarChart grafBarra = fazBarra(dadosFiltrados);
-            hboxGrafs.getChildren().addAll(grafPizza, grafBarra);
-        });
+        
+        control.botoes(btnAtualizaDados, btnAtualizaGrafs, hboxGrafs);
 
         HBox hboxFiltros = new HBox();
         hboxFiltros.getChildren().addAll(filtraOrdem, filtraLinha, filtraVelocidade);
@@ -124,61 +109,6 @@ public class Interface extends Application {
 
         stage.setScene(new Scene(vbox, 730, 800));
         stage.show();
-    }
-
-    public void filtraTabela(TextField filtraLinha, TextField filtraVelocidade, 
-            TextField filtraOrdem) {
-
-        ObjectProperty<Predicate<Onibus>> filtroLinha = new SimpleObjectProperty<>();
-        ObjectProperty<Predicate<Onibus>> filtroVelocidade = new SimpleObjectProperty<>();
-        ObjectProperty<Predicate<Onibus>> filtroOrdem = new SimpleObjectProperty<>();
-
-        filtroLinha.bind(Bindings.createObjectBinding(() -> 
-                    onb -> onb.getLinha().contains(filtraLinha.getText()), 
-                    filtraLinha.textProperty()));
-
-        filtroVelocidade.bind(Bindings.createObjectBinding(() -> 
-                    onb -> onb.getVelocidade().contains(filtraVelocidade.getText()), 
-                    filtraVelocidade.textProperty()));
-
-        filtroOrdem.bind(Bindings.createObjectBinding(() -> 
-                    onb -> onb.getOrdem().contains(filtraOrdem.getText()), 
-                    filtraOrdem.textProperty()));
-
-        dadosFiltrados = new FilteredList<>(frota.listaFrota(), p -> true);
-        table.setItems(dadosFiltrados);
-        dadosFiltrados.predicateProperty().bind(Bindings.createObjectBinding(
-                    () -> filtroLinha.get().and(filtroVelocidade.get().and(filtroOrdem.get())), 
-                    filtroLinha, filtroVelocidade, filtroOrdem));
-    }
-
-    public PieChart fazPizza(FilteredList<Onibus> dadosFiltrados) {
-        ObservableList<PieChart.Data> pizzaData = 
-            FXCollections.observableArrayList(
-                    new PieChart.Data("Veículos parados", frota.onibusParadosPercent(dadosFiltrados)), 
-                    new PieChart.Data("Veículos em movimento", frota.onibusMovimentoPercent(dadosFiltrados)));
-
-        PieChart grafPizza = new PieChart(pizzaData);
-        return grafPizza;
-    } 
-
-    public BarChart fazBarra(FilteredList<Onibus> dadosFiltrados) {
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        BarChart<String,Number> grafBarra = new BarChart<String,Number>(xAxis,yAxis);
-
-        xAxis.setLabel("Linha");       
-        yAxis.setLabel("Quant. veículos");
-
-        XYChart.Series series = new XYChart.Series();
-
-        for (String linha : frota.linhasFrotaFiltrada(dadosFiltrados)) {
-            int quantVeiculos = frota.qtdOnibusLinha(linha, dadosFiltrados);
-            series.getData().add(new XYChart.Data(linha, quantVeiculos));
-        }
-
-        grafBarra.getData().addAll(series);
-        return grafBarra;
     }
 
     public static void main(String[] args) {
