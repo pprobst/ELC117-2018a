@@ -27,15 +27,15 @@ import java.util.function.Predicate;
 
 public class Interface extends Application {
     private TableView<Onibus> table = new TableView<Onibus>();
-    private Info info = new Info();
+    private Frota frota = new Frota();
     private FilteredList<Onibus> dadosFiltrados;
 
     @Override
     public void start(Stage stage) {
         Label label = new Label("Frota de ônibus do Rio de Janeiro");
 
-        info.setaURL("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/obterTodasPosicoes");
-        //info.criaFrota();
+        frota.setaURL("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/obterTodasPosicoes");
+        //frota.criaFrota();
 
         TableColumn datahCol = new TableColumn("Data/Hora");
         datahCol.setMinWidth(150);
@@ -82,7 +82,6 @@ public class Interface extends Application {
                 new PropertyValueFactory<Onibus, String>("velocidade"));
         velCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        //table.setItems(dadosFiltrados);
         table.getColumns().addAll(datahCol, ordemCol, linhaCol, latCol, longCol, velCol);
 
         TextField filtraLinha = new TextField();
@@ -99,12 +98,11 @@ public class Interface extends Application {
 
         Button btnAtualizaDados = new Button("Atualizar dados");
         btnAtualizaDados.setOnAction(e -> {
-            info.criaFrota();
+            frota.criaFrota();
             hboxGrafs.getChildren().clear();
             PieChart grafPizza = fazPizza(dadosFiltrados); 
             BarChart grafBarra = fazBarra(dadosFiltrados);
             hboxGrafs.getChildren().addAll(grafPizza, grafBarra);
-            //info.atualizaFrota();
         });
 
         Button btnAtualizaGrafs = new Button("Atualizar gráficos");
@@ -124,7 +122,7 @@ public class Interface extends Application {
         vbox.setPadding(new Insets(10, 10, 10, 10));
         vbox.getChildren().addAll(label, btnAtualizaDados, btnAtualizaGrafs, hboxFiltros, table, hboxGrafs);
 
-        stage.setScene(new Scene(vbox, 800, 600));
+        stage.setScene(new Scene(vbox, 730, 800));
         stage.show();
     }
 
@@ -147,7 +145,7 @@ public class Interface extends Application {
                     onb -> onb.getOrdem().contains(filtraOrdem.getText()), 
                     filtraOrdem.textProperty()));
 
-        dadosFiltrados = new FilteredList<>(info.listaFrota(), p -> true);
+        dadosFiltrados = new FilteredList<>(frota.listaFrota(), p -> true);
         table.setItems(dadosFiltrados);
         dadosFiltrados.predicateProperty().bind(Bindings.createObjectBinding(
                     () -> filtroLinha.get().and(filtroVelocidade.get().and(filtroOrdem.get())), 
@@ -157,8 +155,8 @@ public class Interface extends Application {
     public PieChart fazPizza(FilteredList<Onibus> dadosFiltrados) {
         ObservableList<PieChart.Data> pizzaData = 
             FXCollections.observableArrayList(
-                    new PieChart.Data("Veículos parados", info.onibusParadosPercent(dadosFiltrados)), 
-                    new PieChart.Data("Veículos em movimento", info.onibusMovimentoPercent(dadosFiltrados)));
+                    new PieChart.Data("Veículos parados", frota.onibusParadosPercent(dadosFiltrados)), 
+                    new PieChart.Data("Veículos em movimento", frota.onibusMovimentoPercent(dadosFiltrados)));
 
         PieChart grafPizza = new PieChart(pizzaData);
         return grafPizza;
@@ -174,8 +172,8 @@ public class Interface extends Application {
 
         XYChart.Series series = new XYChart.Series();
 
-        for (String linha : info.linhasFrotaFiltrada(dadosFiltrados)) {
-            int quantVeiculos = info.qtdOnibusLinha(linha, dadosFiltrados);
+        for (String linha : frota.linhasFrotaFiltrada(dadosFiltrados)) {
+            int quantVeiculos = frota.qtdOnibusLinha(linha, dadosFiltrados);
             series.getData().add(new XYChart.Data(linha, quantVeiculos));
         }
 

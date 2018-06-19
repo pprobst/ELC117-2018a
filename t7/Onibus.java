@@ -19,7 +19,8 @@ public class Onibus {
                   String longitude, String velocidade) {
         this.datah = new SimpleStringProperty(datah);
         this.ordem = new SimpleStringProperty(ordem);
-        this.linha = new SimpleStringProperty(linha);
+        if (linha.equals("")) this.linha = new SimpleStringProperty("Sem linha");
+        else this.linha = new SimpleStringProperty(linha);
         this.latitude = new SimpleStringProperty(latitude);
         this.longitude = new SimpleStringProperty(longitude);
         this.velocidade = new SimpleStringProperty(velocidade);

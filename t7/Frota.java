@@ -13,7 +13,7 @@ import javafx.collections.transformation.FilteredList;
  * sendo esta última utilizada para a elaboração dos gráficos no View/Controller.
  */
 
-public class Info {
+public class Frota {
     private API api = new API();
     private String url;
     private ObservableList<Onibus> frota = FXCollections.observableArrayList();
@@ -87,7 +87,7 @@ public class Info {
         this.linhas.clear();
         for (Onibus onb : this.frota) {
             String linhaAtual = onb.getLinha();
-            if (!this.linhas.contains(linhaAtual) && linhaAtual != "") 
+            if (!this.linhas.contains(linhaAtual)) 
                 this.linhas.add(linhaAtual);
         }
     }
@@ -100,7 +100,7 @@ public class Info {
         ArrayList<String> linhasFiltradas = new ArrayList<String>();
         for (Onibus onb : onibusFiltrados) {
             String linhaAtual = onb.getLinha();
-            if (!linhasFiltradas.contains(linhaAtual) && linhaAtual != "") 
+            if (!linhasFiltradas.contains(linhaAtual)) 
                 linhasFiltradas.add(linhaAtual);
         }
         return linhasFiltradas;
