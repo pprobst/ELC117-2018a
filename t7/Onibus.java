@@ -3,8 +3,8 @@ package t7;
 import javafx.beans.property.SimpleStringProperty;
 
 /* 
- * Armazena e manipula as informações sobre um ônibus da frota da cidade do 
- * Rio de Janeiro para mostrá-las nas tabelas da interface. 
+ * Classe Model que armazena e manipula as informações sobre um ônibus da frota da 
+ * cidade do Rio de Janeiro. 
  *
  */
 public class Onibus {

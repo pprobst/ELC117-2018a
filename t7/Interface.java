@@ -9,6 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -25,10 +26,16 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import java.util.function.Predicate;
+import java.io.File;
+
+/*
+ * Classe Interface (View).
+ * Cria as bases para a interface do programa e atua como lançador.
+ *
+ */
 
 public class Interface extends Application {
     private Control control = new Control();
-    //private FilteredList<Onibus> dadosFiltrados;
 
     @Override
     public void start(Stage stage) {
@@ -82,6 +89,7 @@ public class Interface extends Application {
 
         table.getColumns().addAll(datahCol, ordemCol, linhaCol, latCol, longCol, velCol);
 
+        // áreas de filtragem
         TextField filtraLinha = new TextField();
         filtraLinha.setPromptText("Linha");
         TextField filtraVelocidade = new TextField();
@@ -89,15 +97,19 @@ public class Interface extends Application {
         TextField filtraOrdem = new TextField();
         filtraOrdem.setPromptText("Ordem");
 
-        // controla a filtragem de dados
-        control.filtraTabela(table, filtraLinha, filtraVelocidade, filtraOrdem);
-
         HBox hboxGrafs = new HBox();
         hboxGrafs.setSpacing(5);
-
+        
+        // botões
         Button btnAtualizaDados = new Button("Atualizar dados");
         Button btnAtualizaGrafs = new Button("Atualizar gráficos");
+        Button btnAbreJSON = new Button("Abrir JSON");
 
+        // file chooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Abrir JSON");
+        
+        // textos informativos (abaixo da tabela)
         Text txtUltimaLeitura = new Text();
         txtUltimaLeitura.setWrappingWidth(170);
         txtUltimaLeitura.setText("Data da última leitura: N/A");
@@ -111,17 +123,19 @@ public class Interface extends Application {
         txtDataMaisRecente.setWrappingWidth(150);
         txtDataMaisRecente.setText("Data mais recente: N/A");
 
+         // controla a filtragem de dados
+        control.filtraTabela(table, filtraLinha, filtraVelocidade, filtraOrdem);
 
         // controla a função de cada botão
-        control.botoes(btnAtualizaDados, btnAtualizaGrafs, txtUltimaLeitura, txtTamFrota, 
-                       txtDataMenosRecente, txtDataMaisRecente, hboxGrafs);
+        control.botoes(btnAtualizaDados, btnAtualizaGrafs, btnAbreJSON, txtUltimaLeitura, 
+                       txtTamFrota, txtDataMenosRecente, txtDataMaisRecente, hboxGrafs, stage);
 
         HBox hboxFiltros = new HBox();
         hboxFiltros.getChildren().addAll(filtraOrdem, filtraLinha, filtraVelocidade);
         hboxFiltros.setSpacing(5);
 
         HBox hboxBotoes = new HBox();
-        hboxBotoes.getChildren().addAll(btnAtualizaDados, btnAtualizaGrafs);
+        hboxBotoes.getChildren().addAll(btnAtualizaDados, btnAtualizaGrafs, btnAbreJSON);
         hboxBotoes.setSpacing(5);
 
         HBox hboxInfo = new HBox();

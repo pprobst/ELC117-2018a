@@ -7,6 +7,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -24,37 +25,64 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import java.util.function.Predicate;
+import java.io.File;
 
+/*
+ * Classe controladora.
+ * Ela faz o intermédio entre o Model (Frota e Onibus) e o View (Interface).
+ *
+ */
 public class Control {
-    private Frota frota = new Frota();
+    private Frota frota = new Frota("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/obterTodasPosicoes");
     private FilteredList<Onibus> dadosFiltrados;
 
-    public Control() {
-        frota.setaURL("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/obterTodasPosicoes");
-    }
-
+    // Retorna os dados filtrados
     public FilteredList<Onibus> pegaDadosFiltrados() {
         return this.dadosFiltrados;
     }
 
-    public void botoes(Button btnAtualizaDados, Button btnAtualizaGrafs, Text txtUltimaLeitura, 
-                       Text txtTamFrota, Text txtDataMenosRecente, Text txtDataMaisRecente, 
-                       HBox hboxGrafs) {
+    // Faz o controle dos botões (bastante coisa...)
+    public void botoes(Button btnAtualizaDados, Button btnAtualizaGrafs, Button btnAbreJson, 
+                       Text txtUltimaLeitura, Text txtTamFrota, Text txtDataMenosRecente, 
+                       Text txtDataMaisRecente, HBox hboxGrafs, Stage stage) {
 
         btnAtualizaDados.setOnAction(e -> {
             frota.criaFrota();
-            txtUltimaLeitura.setText("Data da última leitura: " + frota.serverUltimaLeitura());
-            txtTamFrota.setText("Tamanho total da frota: " + frota.tamFrota());
-            txtDataMenosRecente.setText("Data menos recente: " + frota.dataMenosRecente());
-            txtDataMaisRecente.setText("Data mais recente: " + frota.dataMaisRecente());
+            this.atualizaInfo(txtUltimaLeitura, txtTamFrota, txtDataMenosRecente, 
+                              txtDataMaisRecente);
             criaGraficos(hboxGrafs);
         });
 
         btnAtualizaGrafs.setOnAction(e -> {
             criaGraficos(hboxGrafs);
         });
+
+        btnAbreJson.setOnAction(e -> {
+            FileChooser fc = new FileChooser();
+            fc.setTitle("Abra um arquivo JSON");
+            //fc.getExtensionFilters().add(
+            //        new ExtensionFilter("Arquivos JSON", "*.json"));
+            File arq = fc.showOpenDialog(stage);
+
+            if (arq != null) {
+                frota.criaFrotaArq(arq);
+                this.atualizaInfo(txtUltimaLeitura, txtTamFrota, txtDataMenosRecente, 
+                                  txtDataMaisRecente);
+                criaGraficos(hboxGrafs);
+            }
+        });
     }
 
+    // Atualiza as informações textuais abaixo da tabela
+    public void atualizaInfo(Text txtUltimaLeitura, Text txtTamFrota, Text txtDataMenosRecente,
+                             Text txtDataMaisRecente) {
+        txtUltimaLeitura.setText("Data da última leitura: " + frota.serverUltimaLeitura());
+        txtTamFrota.setText("Tamanho total da frota: " + frota.tamFrota());
+        txtDataMenosRecente.setText("Data menos recente: " + frota.dataMenosRecente());
+        txtDataMaisRecente.setText("Data mais recente: " + frota.dataMaisRecente());
+    }
+
+    // Cria os gráficos
     public void criaGraficos(HBox hboxGrafs) {
         hboxGrafs.getChildren().clear();
         PieChart grafPizza = fazPizza(); 
@@ -62,6 +90,7 @@ public class Control {
         hboxGrafs.getChildren().addAll(grafPizza, grafBarra);
     }
 
+    // Retorna o gráfico de pizza (% de veículos parados e em movimento)
     public PieChart fazPizza() {
         ObservableList<PieChart.Data> pizzaData = 
             FXCollections.observableArrayList(
@@ -72,6 +101,7 @@ public class Control {
         return grafPizza;
     } 
 
+    // Retorna o gráfico de barras (quant. veículos por linha)
     public BarChart fazBarra() {
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
@@ -91,6 +121,8 @@ public class Control {
         return grafBarra;
     }
 
+    // Filtra a tabela de acordo com o que foi inserido nos campos de filtragem;
+    // Caso os campos estiverem vazios, mostra todos os dados
     public void filtraTabela(TableView<Onibus> table, TextField filtraLinha, TextField filtraVelocidade, 
                              TextField filtraOrdem) {
 

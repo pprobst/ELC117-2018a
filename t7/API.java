@@ -13,15 +13,30 @@ import javax.script.ScriptException;
 
 public class API {
     private HttpJSONService http = new HttpJSONService();
+    private JSONParsing parser = new JSONParsing();
     
+    // Faz o parsing do JSON de uma URL fornecida.
     public Map muhJSON(String url) {
         Map json = null;
         try {
             json = http.sendGet(url);
         } catch (Exception e) {
             System.out.println("Exceção: não foi possível conectar-se ao servidor" + 
-                               "\nPor favor, cheque sua conexão com a internet ou" +
-                               " tente novamente mais tarde!");
+                               "\nCheque sua conexão com a internet ou" +
+                               " tente novamente mais tarde.");
+        }
+        return json;
+    }
+
+    // Faz o parsing de um string em formato JSON qualquer; utilizado caso usarmos
+    // um arquivo como entrada.
+    public Map stringJSON(String str) {
+        Map json = null;
+        try {
+            json = parser.parseJSON(str);
+        } catch (Exception e) {
+            System.out.println("Exceção: não foi possível fazer o parsing do arquivo." + 
+                               "Certifique-se que está usando um arquivo JSON válido.");
         }
         return json;
     }
