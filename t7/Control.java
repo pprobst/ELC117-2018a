@@ -123,12 +123,17 @@ public class Control {
 
     // Filtra a tabela de acordo com o que foi inserido nos campos de filtragem;
     // Caso os campos estiverem vazios, mostra todos os dados
-    public void filtraTabela(TableView<Onibus> table, TextField filtraLinha, TextField filtraVelocidade, 
-                             TextField filtraOrdem) {
+    public void filtraTabela(TableView<Onibus> table, TextField filtraDatah, TextField filtraLinha, 
+                             TextField filtraVelocidade, TextField filtraOrdem) {
 
+        ObjectProperty<Predicate<Onibus>> filtroDatah = new SimpleObjectProperty<>();
         ObjectProperty<Predicate<Onibus>> filtroLinha = new SimpleObjectProperty<>();
         ObjectProperty<Predicate<Onibus>> filtroVelocidade = new SimpleObjectProperty<>();
         ObjectProperty<Predicate<Onibus>> filtroOrdem = new SimpleObjectProperty<>();
+
+        filtroDatah.bind(Bindings.createObjectBinding(() -> 
+                    onb -> onb.getDatah().contains(filtraDatah.getText()), 
+                    filtraDatah.textProperty()));
 
         filtroLinha.bind(Bindings.createObjectBinding(() -> 
                     onb -> onb.getLinha().contains(filtraLinha.getText()), 
@@ -145,7 +150,7 @@ public class Control {
         dadosFiltrados = new FilteredList<>(frota.listaFrota(), p -> true);
         table.setItems(dadosFiltrados);
         dadosFiltrados.predicateProperty().bind(Bindings.createObjectBinding(
-                    () -> filtroLinha.get().and(filtroVelocidade.get().and(filtroOrdem.get())), 
-                    filtroLinha, filtroVelocidade, filtroOrdem));
+                    () -> filtroDatah.get().and(filtroLinha.get().and(filtroVelocidade.get().and(filtroOrdem.get()))), 
+                    filtroDatah, filtroLinha, filtroVelocidade, filtroOrdem));
     }
 }

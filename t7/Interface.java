@@ -33,7 +33,6 @@ import java.io.File;
  * Cria as bases para a interface do programa e atua como lançador.
  *
  */
-
 public class Interface extends Application {
     private Control control = new Control();
 
@@ -90,6 +89,8 @@ public class Interface extends Application {
         table.getColumns().addAll(datahCol, ordemCol, linhaCol, latCol, longCol, velCol);
 
         // áreas de filtragem
+        TextField filtraDatah = new TextField();
+        filtraDatah.setPromptText("Data/Hora");
         TextField filtraLinha = new TextField();
         filtraLinha.setPromptText("Linha");
         TextField filtraVelocidade = new TextField();
@@ -124,14 +125,14 @@ public class Interface extends Application {
         txtDataMaisRecente.setText("Data mais recente: N/A");
 
          // controla a filtragem de dados
-        control.filtraTabela(table, filtraLinha, filtraVelocidade, filtraOrdem);
+        control.filtraTabela(table, filtraDatah, filtraLinha, filtraVelocidade, filtraOrdem);
 
         // controla a função de cada botão
         control.botoes(btnAtualizaDados, btnAtualizaGrafs, btnAbreJSON, txtUltimaLeitura, 
                        txtTamFrota, txtDataMenosRecente, txtDataMaisRecente, hboxGrafs, stage);
 
         HBox hboxFiltros = new HBox();
-        hboxFiltros.getChildren().addAll(filtraOrdem, filtraLinha, filtraVelocidade);
+        hboxFiltros.getChildren().addAll(filtraDatah, filtraOrdem, filtraLinha, filtraVelocidade);
         hboxFiltros.setSpacing(5);
 
         HBox hboxBotoes = new HBox();

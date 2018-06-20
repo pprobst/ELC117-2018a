@@ -67,6 +67,7 @@ public class Frota {
             String latitude = String.valueOf(dado_atual.get(3));
             String longitude = String.valueOf(dado_atual.get(4));
             String velocidade = String.valueOf(dado_atual.get(5));
+            if (velocidade.equals("0.0")) velocidade = "Parado";
 
             Onibus onibus = new Onibus(datah, ordem, linha, latitude,
                                        longitude, velocidade);
@@ -116,7 +117,7 @@ public class Frota {
         int contPar = 0;
 
         for (Onibus onb : onibusFiltrados) {
-            if (Double.parseDouble(onb.getVelocidade()) <= 0) contPar++;
+            if (this.estaParado(onb)) contPar++;
         }
 
         return contPar;
@@ -127,10 +128,18 @@ public class Frota {
         int contMov = 0;
 
         for (Onibus onb : onibusFiltrados) {
-            if (Double.parseDouble(onb.getVelocidade()) >= 0) contMov++; 
+            if (!this.estaParado(onb)) contMov++; 
         }
 
         return contMov;
+    }
+
+    // Verifica se um ônibus está parado ou não; retorna true se estiver,
+    // false caso contrário
+    public boolean estaParado(Onibus onb) {
+        if (onb.getVelocidade().equals("Parado"))
+            return true;
+        return false;
     }
 
     // Retorna o percentual de veículos parados da frota filtrada
@@ -156,12 +165,12 @@ public class Frota {
         return linhasFiltradas;
     }
 
-    // Retorna a quantidade de veículos existentes em uma linha da frota filtrada
+    // Retorna a quantidade de veículos em movimento em uma linha da frota filtrada
     public int qtdOnibusLinha(String linha, FilteredList<Onibus> onibusFiltrados) {
         int contOnibusLinha = 0;
 
         for (Onibus onb : onibusFiltrados) {
-           if (onb.getLinha().equals(linha) && Double.parseDouble(onb.getVelocidade()) > 0.0) 
+           if (onb.getLinha().equals(linha) && !this.estaParado(onb)) 
                contOnibusLinha++;
         }
 
