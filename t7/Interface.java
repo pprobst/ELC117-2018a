@@ -26,6 +26,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.io.File;
 
 /*
@@ -119,6 +121,10 @@ public class Interface extends Application {
         TextField filtraComent = new TextField();
         filtraComent.setPromptText("Comentário");
 
+        ArrayList<TextField> filtros = new ArrayList<TextField>(
+                                           Arrays.asList(filtraDatah, filtraLinha, filtraVelocidade, 
+                                                         filtraOrdem, filtraComent));
+
         HBox hboxGrafs = new HBox();
         hboxGrafs.setSpacing(5);
         
@@ -154,7 +160,7 @@ public class Interface extends Application {
 
         // Controla a função de cada botão
         control.botoes(btnAtualizaDados, btnAtualizaGrafs, btnAbreJSON, txtUltimaLeitura, 
-                       txtTamFrota, txtDataMenosRecente, txtDataMaisRecente, hboxGrafs, stage);
+                       txtTamFrota, txtDataMenosRecente, txtDataMaisRecente, hboxGrafs, filtros, stage);
 
         HBox hboxFiltros = new HBox();
         hboxFiltros.getChildren().addAll(filtraDatah, filtraOrdem, filtraLinha, filtraVelocidade,

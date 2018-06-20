@@ -26,6 +26,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import java.util.function.Predicate;
+import java.util.ArrayList;
 import java.io.File;
 
 /*
@@ -44,13 +45,14 @@ public class Control {
 
     // Faz o controle dos botões (bastante coisa...)
     public void botoes(Button btnAtualizaDados, Button btnAtualizaGrafs, Button btnAbreJson, 
-            Text txtUltimaLeitura, Text txtTamFrota, Text txtDataMenosRecente, 
-            Text txtDataMaisRecente, HBox hboxGrafs, Stage stage) {
+            Text txtUltimaLeitura, Text txtTamFrota, Text txtDataMenosRecente, Text txtDataMaisRecente, 
+            HBox hboxGrafs, ArrayList<TextField> filtros, Stage stage) {
 
         btnAtualizaDados.setOnAction(e -> {
             frota.criaFrota();
             this.atualizaInfo(txtUltimaLeitura, txtTamFrota, txtDataMenosRecente, 
                     txtDataMaisRecente);
+            this.apagaFiltros(filtros);
             criaGraficos(hboxGrafs);
         });
 
@@ -69,9 +71,16 @@ public class Control {
                 frota.criaFrotaArq(arq);
                 this.atualizaInfo(txtUltimaLeitura, txtTamFrota, txtDataMenosRecente, 
                         txtDataMaisRecente);
+                this.apagaFiltros(filtros);
                 criaGraficos(hboxGrafs);
             }
         });
+    }
+
+    // Apaga o texto dos campos de filtro
+    public void apagaFiltros(ArrayList<TextField> filtros) {
+        for (TextField filtro : filtros)
+            filtro.clear();
     }
 
     // Faz o controle da edição de comentários
