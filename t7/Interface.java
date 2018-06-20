@@ -41,6 +41,9 @@ public class Interface extends Application {
         Label label = new Label("Frota de ônibus do Rio de Janeiro");
         TableView<Onibus> table = new TableView<Onibus>();
 
+        table.setEditable(true);
+
+        // Cria colunas
         TableColumn datahCol = new TableColumn("Data/Hora");
         datahCol.setMinWidth(150);
         TableColumn ordemCol = new TableColumn("Ordem");
@@ -53,6 +56,16 @@ public class Interface extends Application {
         longCol.setMinWidth(130);
         TableColumn velCol = new TableColumn("Velocidade");
         velCol.setMinWidth(120);
+        TableColumn comentCol = new TableColumn("Comentário");
+        comentCol.setMinWidth(155);
+
+        datahCol.setEditable(false);
+        ordemCol.setEditable(false);
+        linhaCol.setEditable(false);
+        latCol.setEditable(false);
+        longCol.setEditable(false);
+        velCol.setEditable(false);
+        comentCol.setEditable(true);
 
         // Ajeitar mais tarde...
         // Para evitar warnings
@@ -86,9 +99,15 @@ public class Interface extends Application {
                 new PropertyValueFactory<Onibus, String>("velocidade"));
         velCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        table.getColumns().addAll(datahCol, ordemCol, linhaCol, latCol, longCol, velCol);
+        comentCol.setCellValueFactory(
+                new PropertyValueFactory<Onibus, String>("comentario"));
+        comentCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        // áreas de filtragem
+        // Adiciona as colunas na tabela
+        table.getColumns().addAll(datahCol, ordemCol, linhaCol, latCol, longCol, 
+                                  velCol, comentCol);
+
+        // Áreas de filtragem
         TextField filtraDatah = new TextField();
         filtraDatah.setPromptText("Data/Hora");
         TextField filtraLinha = new TextField();
@@ -97,20 +116,22 @@ public class Interface extends Application {
         filtraVelocidade.setPromptText("Velocidade");
         TextField filtraOrdem = new TextField();
         filtraOrdem.setPromptText("Ordem");
+        TextField filtraComent = new TextField();
+        filtraComent.setPromptText("Comentário");
 
         HBox hboxGrafs = new HBox();
         hboxGrafs.setSpacing(5);
         
-        // botões
+        // Botões
         Button btnAtualizaDados = new Button("Atualizar dados");
         Button btnAtualizaGrafs = new Button("Atualizar gráficos");
         Button btnAbreJSON = new Button("Abrir JSON");
 
-        // file chooser
+        // File chooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Abrir JSON");
         
-        // textos informativos (abaixo da tabela)
+        // Textos informativos (abaixo da tabela)
         Text txtUltimaLeitura = new Text();
         txtUltimaLeitura.setWrappingWidth(170);
         txtUltimaLeitura.setText("Data da última leitura: N/A");
@@ -124,15 +145,20 @@ public class Interface extends Application {
         txtDataMaisRecente.setWrappingWidth(150);
         txtDataMaisRecente.setText("Data mais recente: N/A");
 
-         // controla a filtragem de dados
-        control.filtraTabela(table, filtraDatah, filtraLinha, filtraVelocidade, filtraOrdem);
+        // Controla a edição de comentários
+        control.editaComentarios(comentCol);
+        
+        // Controla a filtragem de dados
+        control.filtraTabela(table, filtraDatah, filtraLinha, filtraVelocidade, filtraOrdem, 
+                             filtraComent);
 
-        // controla a função de cada botão
+        // Controla a função de cada botão
         control.botoes(btnAtualizaDados, btnAtualizaGrafs, btnAbreJSON, txtUltimaLeitura, 
                        txtTamFrota, txtDataMenosRecente, txtDataMaisRecente, hboxGrafs, stage);
 
         HBox hboxFiltros = new HBox();
-        hboxFiltros.getChildren().addAll(filtraDatah, filtraOrdem, filtraLinha, filtraVelocidade);
+        hboxFiltros.getChildren().addAll(filtraDatah, filtraOrdem, filtraLinha, filtraVelocidade,
+                                         filtraComent);
         hboxFiltros.setSpacing(5);
 
         HBox hboxBotoes = new HBox();
@@ -149,7 +175,7 @@ public class Interface extends Application {
         vbox.setPadding(new Insets(10, 10, 10, 10));
         vbox.getChildren().addAll(label, hboxBotoes, hboxFiltros, table, hboxInfo, hboxGrafs);
 
-        stage.setScene(new Scene(vbox, 730, 800));
+        stage.setScene(new Scene(vbox, 900, 850));
         stage.show();
     }
 

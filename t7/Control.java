@@ -14,6 +14,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -43,13 +44,13 @@ public class Control {
 
     // Faz o controle dos botões (bastante coisa...)
     public void botoes(Button btnAtualizaDados, Button btnAtualizaGrafs, Button btnAbreJson, 
-                       Text txtUltimaLeitura, Text txtTamFrota, Text txtDataMenosRecente, 
-                       Text txtDataMaisRecente, HBox hboxGrafs, Stage stage) {
+            Text txtUltimaLeitura, Text txtTamFrota, Text txtDataMenosRecente, 
+            Text txtDataMaisRecente, HBox hboxGrafs, Stage stage) {
 
         btnAtualizaDados.setOnAction(e -> {
             frota.criaFrota();
             this.atualizaInfo(txtUltimaLeitura, txtTamFrota, txtDataMenosRecente, 
-                              txtDataMaisRecente);
+                    txtDataMaisRecente);
             criaGraficos(hboxGrafs);
         });
 
@@ -67,15 +68,29 @@ public class Control {
             if (arq != null) {
                 frota.criaFrotaArq(arq);
                 this.atualizaInfo(txtUltimaLeitura, txtTamFrota, txtDataMenosRecente, 
-                                  txtDataMaisRecente);
+                        txtDataMaisRecente);
                 criaGraficos(hboxGrafs);
             }
         });
     }
 
+    // Faz o controle da edição de comentários
+    public void editaComentarios(TableColumn comentCol) {
+        comentCol.setOnEditCommit(
+                new EventHandler<CellEditEvent<Onibus, String>>() {
+                    @Override
+                    public void handle(CellEditEvent<Onibus, String> t) {
+                        ((Onibus) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                        ).setComentario(t.getNewValue());
+                    }
+                }
+        ); 
+    }
+
     // Atualiza as informações textuais abaixo da tabela
     public void atualizaInfo(Text txtUltimaLeitura, Text txtTamFrota, Text txtDataMenosRecente,
-                             Text txtDataMaisRecente) {
+            Text txtDataMaisRecente) {
         txtUltimaLeitura.setText("Data da última leitura: " + frota.serverUltimaLeitura());
         txtTamFrota.setText("Tamanho total da frota: " + frota.tamFrota());
         txtDataMenosRecente.setText("Data menos recente: " + frota.dataMenosRecente());
@@ -108,7 +123,7 @@ public class Control {
         BarChart<String,Number> grafBarra = new BarChart<String,Number>(xAxis,yAxis);
 
         xAxis.setLabel("Linha");       
-        yAxis.setLabel("Quant. veículos");
+        yAxis.setLabel("Quant. veículos em movimento");
 
         XYChart.Series series = new XYChart.Series();
 
@@ -124,12 +139,13 @@ public class Control {
     // Filtra a tabela de acordo com o que foi inserido nos campos de filtragem;
     // Caso os campos estiverem vazios, mostra todos os dados
     public void filtraTabela(TableView<Onibus> table, TextField filtraDatah, TextField filtraLinha, 
-                             TextField filtraVelocidade, TextField filtraOrdem) {
+            TextField filtraVelocidade, TextField filtraOrdem, TextField filtraComent) {
 
         ObjectProperty<Predicate<Onibus>> filtroDatah = new SimpleObjectProperty<>();
         ObjectProperty<Predicate<Onibus>> filtroLinha = new SimpleObjectProperty<>();
         ObjectProperty<Predicate<Onibus>> filtroVelocidade = new SimpleObjectProperty<>();
         ObjectProperty<Predicate<Onibus>> filtroOrdem = new SimpleObjectProperty<>();
+        ObjectProperty<Predicate<Onibus>> filtroComent = new SimpleObjectProperty<>();
 
         filtroDatah.bind(Bindings.createObjectBinding(() -> 
                     onb -> onb.getDatah().contains(filtraDatah.getText()), 
@@ -147,10 +163,15 @@ public class Control {
                     onb -> onb.getOrdem().contains(filtraOrdem.getText()), 
                     filtraOrdem.textProperty()));
 
+        filtroComent.bind(Bindings.createObjectBinding(() -> 
+                    onb -> onb.getComentario().contains(filtraComent.getText()), 
+                    filtraComent.textProperty()));
+
         dadosFiltrados = new FilteredList<>(frota.listaFrota(), p -> true);
         table.setItems(dadosFiltrados);
         dadosFiltrados.predicateProperty().bind(Bindings.createObjectBinding(
-                    () -> filtroDatah.get().and(filtroLinha.get().and(filtroVelocidade.get().and(filtroOrdem.get()))), 
-                    filtroDatah, filtroLinha, filtroVelocidade, filtroOrdem));
+                    () -> filtroDatah.get().and(filtroLinha.get().and(filtroVelocidade.get()
+                          .and(filtroOrdem.get().and(filtroComent.get())))), 
+                          filtroDatah, filtroLinha, filtroVelocidade, filtroOrdem, filtroComent));
     }
 }

@@ -14,9 +14,10 @@ public class Onibus {
     private final SimpleStringProperty latitude;
     private final SimpleStringProperty longitude;
     private final SimpleStringProperty velocidade;
+    private final SimpleStringProperty comentario;
 
     public Onibus(String datah, String ordem, String linha, String latitude, 
-                  String longitude, String velocidade) {
+                  String longitude, String velocidade, String comentario) {
         this.datah = new SimpleStringProperty(datah);
         this.ordem = new SimpleStringProperty(ordem);
         if (linha.equals("")) this.linha = new SimpleStringProperty("Sem linha");
@@ -24,6 +25,7 @@ public class Onibus {
         this.latitude = new SimpleStringProperty(latitude);
         this.longitude = new SimpleStringProperty(longitude);
         this.velocidade = new SimpleStringProperty(velocidade);
+        this.comentario = new SimpleStringProperty(comentario);
     }
 
     public SimpleStringProperty datahProperty() {
@@ -96,5 +98,17 @@ public class Onibus {
 
     public void setVelocidade(String velocidade) {
         this.velocidade.set(velocidade);
+    }
+
+    public SimpleStringProperty comentarioProperty() {
+        return comentario;
+    }
+
+    public String getComentario() {
+        return this.comentario.get();
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario.set(comentario);
     }
 }

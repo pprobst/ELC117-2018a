@@ -68,9 +68,10 @@ public class Frota {
             String longitude = String.valueOf(dado_atual.get(4));
             String velocidade = String.valueOf(dado_atual.get(5));
             if (velocidade.equals("0.0")) velocidade = "Parado";
+            String comentario = "";
 
             Onibus onibus = new Onibus(datah, ordem, linha, latitude,
-                                       longitude, velocidade);
+                                       longitude, velocidade, comentario);
             this.frota.add(onibus);    
         }
         this.criaLinhasFrota();
