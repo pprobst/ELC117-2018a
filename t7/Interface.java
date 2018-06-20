@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -88,6 +89,7 @@ public class Interface extends Application {
         TextField filtraOrdem = new TextField();
         filtraOrdem.setPromptText("Ordem");
 
+        // controla a filtragem de dados
         control.filtraTabela(table, filtraLinha, filtraVelocidade, filtraOrdem);
 
         HBox hboxGrafs = new HBox();
@@ -95,17 +97,42 @@ public class Interface extends Application {
 
         Button btnAtualizaDados = new Button("Atualizar dados");
         Button btnAtualizaGrafs = new Button("Atualizar gráficos");
-        
-        control.botoes(btnAtualizaDados, btnAtualizaGrafs, hboxGrafs);
+
+        Text txtUltimaLeitura = new Text();
+        txtUltimaLeitura.setWrappingWidth(170);
+        txtUltimaLeitura.setText("Data da última leitura: N/A");
+        Text txtTamFrota = new Text();
+        txtTamFrota.setWrappingWidth(170);
+        txtTamFrota.setText("Tamanho total da frota: N/A");
+        Text txtDataMenosRecente = new Text();
+        txtDataMenosRecente.setWrappingWidth(150);
+        txtDataMenosRecente.setText("Data menos recente: N/A");
+        Text txtDataMaisRecente = new Text();
+        txtDataMaisRecente.setWrappingWidth(150);
+        txtDataMaisRecente.setText("Data mais recente: N/A");
+
+
+        // controla a função de cada botão
+        control.botoes(btnAtualizaDados, btnAtualizaGrafs, txtUltimaLeitura, txtTamFrota, 
+                       txtDataMenosRecente, txtDataMaisRecente, hboxGrafs);
 
         HBox hboxFiltros = new HBox();
         hboxFiltros.getChildren().addAll(filtraOrdem, filtraLinha, filtraVelocidade);
         hboxFiltros.setSpacing(5);
 
+        HBox hboxBotoes = new HBox();
+        hboxBotoes.getChildren().addAll(btnAtualizaDados, btnAtualizaGrafs);
+        hboxBotoes.setSpacing(5);
+
+        HBox hboxInfo = new HBox();
+        hboxInfo.getChildren().addAll(txtUltimaLeitura, txtTamFrota, txtDataMenosRecente,
+                                      txtDataMaisRecente);
+        hboxInfo.setSpacing(5);
+
         VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 10, 10, 10));
-        vbox.getChildren().addAll(label, btnAtualizaDados, btnAtualizaGrafs, hboxFiltros, table, hboxGrafs);
+        vbox.getChildren().addAll(label, hboxBotoes, hboxFiltros, table, hboxInfo, hboxGrafs);
 
         stage.setScene(new Scene(vbox, 730, 800));
         stage.show();

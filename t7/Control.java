@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.HBox;
@@ -36,10 +37,16 @@ public class Control {
         return this.dadosFiltrados;
     }
 
-    public void botoes(Button btnAtualizaDados, Button btnAtualizaGrafs, HBox hboxGrafs) {
+    public void botoes(Button btnAtualizaDados, Button btnAtualizaGrafs, Text txtUltimaLeitura, 
+                       Text txtTamFrota, Text txtDataMenosRecente, Text txtDataMaisRecente, 
+                       HBox hboxGrafs) {
+
         btnAtualizaDados.setOnAction(e -> {
             frota.criaFrota();
-            System.out.println();
+            txtUltimaLeitura.setText("Data da última leitura: " + frota.serverUltimaLeitura());
+            txtTamFrota.setText("Tamanho total da frota: " + frota.tamFrota());
+            txtDataMenosRecente.setText("Data menos recente: " + frota.dataMenosRecente());
+            txtDataMaisRecente.setText("Data mais recente: " + frota.dataMaisRecente());
             criaGraficos(hboxGrafs);
         });
 
