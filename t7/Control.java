@@ -44,14 +44,14 @@ public class Control {
     }
 
     // Faz o controle dos botões (bastante coisa...)
-    public void botoes(Button btnAtualizaDados, Button btnAtualizaGrafs, Button btnAbreJson, 
-            Text txtUltimaLeitura, Text txtTamFrota, Text txtDataMenosRecente, Text txtDataMaisRecente, 
-            HBox hboxGrafs, ArrayList<TextField> filtros, Stage stage) {
+    public void botoes(Button btnAtualizaDados, Button btnAtualizaGrafs, Button btnAbreJSON, 
+                       Text txtUltimaLeitura, Text txtTamFrota, Text txtDataMenosRecente, 
+                       Text txtDataMaisRecente, HBox hboxGrafs, ArrayList<TextField> filtros, 
+                       Stage stage) {
 
         btnAtualizaDados.setOnAction(e -> {
             frota.criaFrota();
-            this.atualizaInfo(txtUltimaLeitura, txtTamFrota, txtDataMenosRecente, 
-                    txtDataMaisRecente);
+            this.atualizaInfo(txtUltimaLeitura, txtTamFrota, txtDataMenosRecente, txtDataMaisRecente);
             this.apagaFiltros(filtros);
             criaGraficos(hboxGrafs);
         });
@@ -60,17 +60,17 @@ public class Control {
             criaGraficos(hboxGrafs);
         });
 
-        btnAbreJson.setOnAction(e -> {
+        btnAbreJSON.setOnAction(e -> {
             FileChooser fc = new FileChooser();
             fc.setTitle("Abra um arquivo JSON");
-            //fc.getExtensionFilters().add(
-            //        new ExtensionFilter("Arquivos JSON", "*.json"));
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Arquivos JSON", "*.json");
+            fc.getExtensionFilters().add(extFilter);
             File arq = fc.showOpenDialog(stage);
 
             if (arq != null) {
                 frota.criaFrotaArq(arq);
                 this.atualizaInfo(txtUltimaLeitura, txtTamFrota, txtDataMenosRecente, 
-                        txtDataMaisRecente);
+                                  txtDataMaisRecente);
                 this.apagaFiltros(filtros);
                 criaGraficos(hboxGrafs);
             }
@@ -99,7 +99,7 @@ public class Control {
 
     // Atualiza as informações textuais abaixo da tabela
     public void atualizaInfo(Text txtUltimaLeitura, Text txtTamFrota, Text txtDataMenosRecente,
-            Text txtDataMaisRecente) {
+                             Text txtDataMaisRecente) {
         txtUltimaLeitura.setText("Data da última leitura: " + frota.serverUltimaLeitura());
         txtTamFrota.setText("Tamanho total da frota: " + frota.tamFrota());
         txtDataMenosRecente.setText("Data menos recente: " + frota.dataMenosRecente());
@@ -122,6 +122,7 @@ public class Control {
                     new PieChart.Data("Veículos em movimento", frota.onibusMovimentoPercent(dadosFiltrados)));
 
         PieChart grafPizza = new PieChart(pizzaData);
+        grafPizza.setMinWidth(200);
         return grafPizza;
     } 
 
@@ -142,6 +143,7 @@ public class Control {
         }
 
         grafBarra.getData().add(series);
+        grafBarra.setLegendVisible(false);
         return grafBarra;
     }
 
@@ -161,19 +163,19 @@ public class Control {
                     filtraDatah.textProperty()));
 
         filtroLinha.bind(Bindings.createObjectBinding(() -> 
-                    onb -> onb.getLinha().contains(filtraLinha.getText()), 
+                    onb -> onb.getLinha().toLowerCase().contains(filtraLinha.getText().toLowerCase()), 
                     filtraLinha.textProperty()));
 
         filtroVelocidade.bind(Bindings.createObjectBinding(() -> 
-                    onb -> onb.getVelocidade().contains(filtraVelocidade.getText()), 
+                    onb -> onb.getVelocidade().toLowerCase().contains(filtraVelocidade.getText().toLowerCase()), 
                     filtraVelocidade.textProperty()));
 
         filtroOrdem.bind(Bindings.createObjectBinding(() -> 
-                    onb -> onb.getOrdem().contains(filtraOrdem.getText()), 
+                    onb -> onb.getOrdem().toLowerCase().contains(filtraOrdem.getText().toLowerCase()), 
                     filtraOrdem.textProperty()));
 
         filtroComent.bind(Bindings.createObjectBinding(() -> 
-                    onb -> onb.getComentario().contains(filtraComent.getText()), 
+                    onb -> onb.getComentario().toLowerCase().contains(filtraComent.getText().toLowerCase()), 
                     filtraComent.textProperty()));
 
         dadosFiltrados = new FilteredList<>(frota.listaFrota(), p -> true);

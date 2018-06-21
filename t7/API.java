@@ -15,7 +15,7 @@ public class API {
     private HttpJSONService http = new HttpJSONService();
     private JSONParsing parser = new JSONParsing();
     
-    // Faz o parsing do JSON de uma URL fornecida.
+    // Faz o parsing do JSON de uma URL fornecida
     public Map<?,?> muhJSON(String url) {
         Map<?,?> json = null;
         try {
@@ -29,7 +29,7 @@ public class API {
     }
 
     // Faz o parsing de um string em formato JSON qualquer; utilizado caso usarmos
-    // um arquivo como entrada.
+    // um arquivo como entrada
     public Map<?,?> stringJSON(String str) {
         Map<?,?> json = null;
         try {
