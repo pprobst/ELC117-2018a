@@ -1,4 +1,4 @@
-# Planaridade em JavaFX
+# Dashboard para monitoramento de frota de ônibus urbanos (RJ) em JavaFX
 ##### Para gerar o .jar e executar o programa, digite os seguintes comandos no diretório `t7`:
 
 ```bash
