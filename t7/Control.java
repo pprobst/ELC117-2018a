@@ -119,10 +119,17 @@ public class Control {
         ObservableList<PieChart.Data> pizzaData = 
             FXCollections.observableArrayList(
                     new PieChart.Data("Veículos parados", frota.onibusParadosPercent(dadosFiltrados)), 
-                    new PieChart.Data("Veículos em movimento", frota.onibusMovimentoPercent(dadosFiltrados)));
+                    new PieChart.Data("Veículos movim.", frota.onibusMovimentoPercent(dadosFiltrados)));
+
+        pizzaData.forEach(data ->
+            data.nameProperty().bind(
+                Bindings.concat(
+                    data.getName(), " ", data.pieValueProperty(), "%")
+                )
+            );
 
         PieChart grafPizza = new PieChart(pizzaData);
-        grafPizza.setMinWidth(200);
+        grafPizza.setMinWidth(300);
         return grafPizza;
     } 
 
