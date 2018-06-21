@@ -84,12 +84,12 @@ public class Control {
     }
 
     // Faz o controle da edição de comentários
-    public void editaComentarios(TableColumn comentCol) {
+    public void editaComentarios(TableColumn<Onibus,String> comentCol) {
         comentCol.setOnEditCommit(
                 new EventHandler<CellEditEvent<Onibus, String>>() {
                     @Override
                     public void handle(CellEditEvent<Onibus, String> t) {
-                        ((Onibus) t.getTableView().getItems().get(
+                        (t.getTableView().getItems().get(
                             t.getTablePosition().getRow())
                         ).setComentario(t.getNewValue());
                     }
@@ -110,7 +110,7 @@ public class Control {
     public void criaGraficos(HBox hboxGrafs) {
         hboxGrafs.getChildren().clear();
         PieChart grafPizza = fazPizza(); 
-        BarChart grafBarra = fazBarra();
+        BarChart<String,Number> grafBarra = fazBarra();
         hboxGrafs.getChildren().addAll(grafPizza, grafBarra);
     }
 
@@ -126,7 +126,7 @@ public class Control {
     } 
 
     // Retorna o gráfico de barras (quant. veículos por linha)
-    public BarChart fazBarra() {
+    public BarChart<String,Number> fazBarra() {
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
         BarChart<String,Number> grafBarra = new BarChart<String,Number>(xAxis,yAxis);
@@ -134,14 +134,14 @@ public class Control {
         xAxis.setLabel("Linha");       
         yAxis.setLabel("Quant. veículos em movimento");
 
-        XYChart.Series series = new XYChart.Series();
+        XYChart.Series<String,Number> series = new XYChart.Series<String,Number>();
 
         for (String linha : frota.linhasFrotaFiltrada(dadosFiltrados)) {
             int quantVeiculos = frota.qtdOnibusLinha(linha, dadosFiltrados);
-            series.getData().add(new XYChart.Data(linha, quantVeiculos));
+            series.getData().add(new XYChart.Data<String,Number>(linha, quantVeiculos));
         }
 
-        grafBarra.getData().addAll(series);
+        grafBarra.getData().add(series);
         return grafBarra;
     }
 

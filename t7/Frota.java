@@ -33,8 +33,8 @@ public class Frota {
     // Cria a frota a partir do uso da API web
     public void criaFrota() {
         this.frota.clear();
-        Map json = this.api.muhJSON(this.url);
-        List dados = (List)json.get("DATA");
+        Map<?,?> json = this.api.muhJSON(this.url);
+        List<?> dados = (List<?>)json.get("DATA");
 
         this.adicionaDadosNaFrota(dados);
     }
@@ -50,17 +50,17 @@ public class Frota {
             System.out.println(ex);
         }
 
-        Map json = this.api.stringJSON(conteudo);
-        List dados = (List)json.get("DATA");
+        Map<?,?> json = this.api.stringJSON(conteudo);
+        List<?> dados = (List<?>)json.get("DATA");
 
         this.adicionaDadosNaFrota(dados);
     }
 
     // Pega os dados de uma lista (gerada por criaFrota ou criaFrotaArq) e os adiciona
     // na frota.
-    public void adicionaDadosNaFrota(List dados) {
+    public void adicionaDadosNaFrota(List<?> dados) {
         for (Object dado: dados) {
-            List dado_atual = (List)dado;
+            List<?> dado_atual = (List<?>)dado;
             String datah = (String)dado_atual.get(0);
             String ordem = (String)dado_atual.get(1);
             String linha = String.valueOf(dado_atual.get(2));

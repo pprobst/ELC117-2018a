@@ -16,8 +16,8 @@ public class API {
     private JSONParsing parser = new JSONParsing();
     
     // Faz o parsing do JSON de uma URL fornecida.
-    public Map muhJSON(String url) {
-        Map json = null;
+    public Map<?,?> muhJSON(String url) {
+        Map<?,?> json = null;
         try {
             json = http.sendGet(url);
         } catch (Exception e) {
@@ -30,8 +30,8 @@ public class API {
 
     // Faz o parsing de um string em formato JSON qualquer; utilizado caso usarmos
     // um arquivo como entrada.
-    public Map stringJSON(String str) {
-        Map json = null;
+    public Map<?,?> stringJSON(String str) {
+        Map<?,?> json = null;
         try {
             json = parser.parseJSON(str);
         } catch (Exception e) {
@@ -47,7 +47,7 @@ class HttpJSONService {
     private JSONParsing engine = new JSONParsing();
 
     // HTTP GET request
-    public Map sendGet(String url) throws Exception {     
+    public Map<?,?> sendGet(String url) throws Exception {     
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -86,10 +86,10 @@ class JSONParsing {
         this.engine = sem.getEngineByName("javascript");
     }
 
-    public Map parseJSON(String json) throws IOException, ScriptException {
+    public Map<?,?> parseJSON(String json) throws IOException, ScriptException {
         String script = "Java.asJSONCompatible(" + json + ")";
         Object result = this.engine.eval(script);
-        Map contents = (Map) result;
+        Map<?,?> contents = (Map<?,?>) result;
         return contents;
     }
 }

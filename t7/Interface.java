@@ -40,25 +40,25 @@ public class Interface extends Application {
 
     @Override
     public void start(Stage stage) {
-        Label label = new Label("Frota de ônibus do Rio de Janeiro");
+        stage.setTitle("Frota de ônibus do Rio de Janeiro");
         TableView<Onibus> table = new TableView<Onibus>();
 
         table.setEditable(true);
 
         // Cria colunas
-        TableColumn datahCol = new TableColumn("Data/Hora");
+        TableColumn<Onibus,String> datahCol = new TableColumn<Onibus,String>("Data/Hora");
         datahCol.setMinWidth(150);
-        TableColumn ordemCol = new TableColumn("Ordem");
+        TableColumn<Onibus,String> ordemCol = new TableColumn<Onibus,String>("Ordem");
         ordemCol.setMinWidth(100);
-        TableColumn linhaCol = new TableColumn("Linha");
+        TableColumn<Onibus,String> linhaCol = new TableColumn<Onibus,String>("Linha");
         linhaCol.setMinWidth(100);
-        TableColumn latCol = new TableColumn("Latitude");
+        TableColumn<Onibus,String> latCol = new TableColumn<Onibus,String>("Latitude");
         latCol.setMinWidth(110);
-        TableColumn longCol = new TableColumn("Longitude");
+        TableColumn<Onibus,String> longCol = new TableColumn<Onibus,String>("Longitude");
         longCol.setMinWidth(130);
-        TableColumn velCol = new TableColumn("Velocidade");
+        TableColumn<Onibus,String> velCol = new TableColumn<Onibus,String>("Velocidade");
         velCol.setMinWidth(120);
-        TableColumn comentCol = new TableColumn("Comentário");
+        TableColumn<Onibus,String> comentCol = new TableColumn<Onibus,String>("Comentário");
         comentCol.setMinWidth(155);
 
         datahCol.setEditable(false);
@@ -68,14 +68,6 @@ public class Interface extends Application {
         longCol.setEditable(false);
         velCol.setEditable(false);
         comentCol.setEditable(true);
-
-        // Ajeitar mais tarde...
-        // Para evitar warnings
-        // TableView<DataEntry> table = new TableView<DataEntry>();
-        // TableColumn<DataEntry,String> datahCol = new TableColumn<DataEntry,String>("A");
-        // TableColumn<DataEntry,String> ordemCol = new TableColumn<DataEntry,String>("B");
-        //table.getColumns().add(datahCol);
-        //table.getColumns().add(ordemCol);
 
         datahCol.setCellValueFactory(
                 new PropertyValueFactory<Onibus, String>("datah"));
@@ -106,8 +98,14 @@ public class Interface extends Application {
         comentCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
         // Adiciona as colunas na tabela
-        table.getColumns().addAll(datahCol, ordemCol, linhaCol, latCol, longCol, 
-                                  velCol, comentCol);
+        // (para não gerar warning parece que se deve fazer assim...)
+        table.getColumns().add(datahCol);
+        table.getColumns().add(ordemCol);
+        table.getColumns().add(linhaCol);
+        table.getColumns().add(latCol);
+        table.getColumns().add(longCol);
+        table.getColumns().add(velCol);
+        table.getColumns().add(comentCol);
 
         // Áreas de filtragem
         TextField filtraDatah = new TextField();
@@ -179,7 +177,7 @@ public class Interface extends Application {
         VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 10, 10, 10));
-        vbox.getChildren().addAll(label, hboxBotoes, hboxFiltros, table, hboxInfo, hboxGrafs);
+        vbox.getChildren().addAll(hboxBotoes, hboxFiltros, table, hboxInfo, hboxGrafs);
 
         stage.setScene(new Scene(vbox, 900, 850));
         stage.show();
