@@ -6,3 +6,8 @@ mkdir src/classes && javac -d src/classes/ src/java/*.java
 javapackager -createjar -srcdir src/classes -outfile FrotaRJ.jar -appclass t7.Interface
 java -jar FrotaRJ.jar 
 ```
+
+* Extras:
+    * Filtros de dados combináveis (gráficos podem ser atualizados com as
+      informações dos dados filtrados);
+    * Coluna de comentários editável.
